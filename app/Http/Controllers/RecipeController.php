@@ -88,12 +88,15 @@ class RecipeController extends Controller
     {
         $this->authorize('view', $recipe);
 
-        $recipe->load(['versions.comments.user', 'versions.comments.resultVersion']);
+        $recipe->load(['versions.comments.user', 'versions.comments.resultVersion', 'versions.comments.recipeVersion']);
 
         $latestVersion = $recipe->versions->sortByDesc('version_number')->first();
 
-        // Get comments for the latest version, sorted chronologically
-        $comments = $latestVersion ? $latestVersion->comments()->with(['user', 'resultVersion'])->orderBy('created_at', 'asc')->get() : collect();
+        // Get ALL comments from ALL versions, sorted chronologically
+        $comments = $recipe->versions
+            ->flatMap(fn($version) => $version->comments)
+            ->sortBy('created_at')
+            ->values();
 
         return view('recipes.show', compact('recipe', 'latestVersion', 'comments'));
     }

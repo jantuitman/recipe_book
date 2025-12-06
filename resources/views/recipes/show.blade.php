@@ -171,6 +171,10 @@
                                                     @endif
                                                     <span class="text-sm text-gray-500">•</span>
                                                     <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                                    @if($comment->recipeVersion && $comment->recipe_version_id !== $latestVersion->id)
+                                                        <span class="text-sm text-gray-500">•</span>
+                                                        <span class="text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded">v{{ $comment->recipeVersion->version_number }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <p class="text-gray-700 whitespace-pre-wrap">{{ $comment->content }}</p>
