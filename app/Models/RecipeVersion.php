@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RecipeVersion extends Model
 {
+    use HasFactory;
     /**
      * Indicates if the model should be timestamped.
      * RecipeVersion only has created_at, no updated_at.

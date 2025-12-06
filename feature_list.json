@@ -719,7 +719,7 @@
       "id": 50,
       "description": "Recipe can be deleted with confirmation",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",
@@ -735,7 +735,7 @@
       "id": 51,
       "description": "Recipe deletion cascades to versions and comments",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with 3 versions and 5 comments (artisan test)",
         "Delete recipe (artisan test)",
