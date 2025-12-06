@@ -76,7 +76,7 @@ class ChatController extends Controller
                 $recipeData = $aiResponse['recipe'];
 
                 // Save AI response with message only (not the JSON structure)
-                $user->chatMessages()->create([
+                $aiMessage = $user->chatMessages()->create([
                     'role' => 'assistant',
                     'content' => $messageContent
                 ]);
@@ -85,7 +85,8 @@ class ChatController extends Controller
                     'success' => true,
                     'response' => $messageContent,
                     'has_recipe' => true,
-                    'recipe' => $recipeData
+                    'recipe' => $recipeData,
+                    'message_id' => $aiMessage->id
                 ]);
             } else {
                 // Normal response (string)

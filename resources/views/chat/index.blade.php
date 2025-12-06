@@ -107,7 +107,7 @@
                 saveButton.className = 'px-4 py-2 text-sm font-semibold text-white rounded-lg transition';
                 saveButton.style.backgroundColor = '#81B29A';
                 saveButton.textContent = '💾 Save this recipe';
-                saveButton.onclick = () => saveRecipeFromChat(recipeData);
+                saveButton.onclick = () => saveRecipeFromChat(recipeData, recipeData.message_id);
 
                 // Hover effect
                 saveButton.onmouseenter = () => {
@@ -126,10 +126,11 @@
         }
 
         // Save recipe from chat
-        async function saveRecipeFromChat(recipeData) {
+        async function saveRecipeFromChat(recipeData, messageId) {
             // Store recipe data temporarily and redirect to create page
             sessionStorage.setItem('chatRecipe', JSON.stringify(recipeData));
-            window.location.href = '/recipes/create?from_chat=1';
+            const url = `/recipes/create?from_chat=1${messageId ? '&message_id=' + messageId : ''}`;
+            window.location.href = url;
         }
 
         // Load previous messages on page load
@@ -179,7 +180,11 @@
 
                 if (data.success && data.response) {
                     // Add AI response (with recipe data if present)
-                    const recipeData = data.has_recipe ? data.recipe : null;
+                    let recipeData = null;
+                    if (data.has_recipe && data.recipe) {
+                        recipeData = data.recipe;
+                        recipeData.message_id = data.message_id; // Include message_id
+                    }
                     addMessage(data.response, 'assistant', new Date().toISOString(), recipeData);
                 } else {
                     // Show error

@@ -197,10 +197,12 @@ Instructions:
         const saveRecipeBtn = document.getElementById('save-recipe-btn');
 
         let parsedRecipe = null;
+        let chatMessageId = null; // Track which chat message this recipe came from
 
         // Check if recipe data was passed from chat
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('from_chat') === '1') {
+            chatMessageId = urlParams.get('message_id');
             const chatRecipeData = sessionStorage.getItem('chatRecipe');
             if (chatRecipeData) {
                 try {
@@ -338,6 +340,15 @@ Instructions:
                     form.appendChild(input);
                 });
             });
+
+            // Add chat_message_id if this recipe came from chat
+            if (chatMessageId) {
+                const messageIdInput = document.createElement('input');
+                messageIdInput.type = 'hidden';
+                messageIdInput.name = 'chat_message_id';
+                messageIdInput.value = chatMessageId;
+                form.appendChild(messageIdInput);
+            }
 
             document.body.appendChild(form);
             form.submit();

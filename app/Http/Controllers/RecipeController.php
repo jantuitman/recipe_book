@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use App\Models\RecipeVersion;
+use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -48,6 +49,7 @@ class RecipeController extends Controller
             'steps' => 'required|array',
             'steps.*.step_number' => 'required|integer',
             'steps.*.instruction' => 'required|string',
+            'chat_message_id' => 'nullable|integer|exists:chat_messages,id',
         ]);
 
         $recipe = Auth::user()->recipes()->create([
@@ -62,6 +64,16 @@ class RecipeController extends Controller
             'steps' => $validated['steps'],
             'change_summary' => 'Initial version',
         ]);
+
+        // If this recipe was created from a chat message, link it
+        if ($request->filled('chat_message_id')) {
+            $chatMessage = ChatMessage::find($validated['chat_message_id']);
+
+            // Verify the message belongs to the authenticated user
+            if ($chatMessage && $chatMessage->user_id === Auth::id()) {
+                $chatMessage->update(['recipe_id' => $recipe->id]);
+            }
+        }
 
         return redirect()->route('recipes.show', $recipe)
             ->with('success', 'Recipe created successfully!');

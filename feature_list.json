@@ -996,7 +996,7 @@
       "id": 69,
       "description": "Saving recipe from chat creates recipe record",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to chat with AI recipe suggestion",
         "Click 'Save this recipe' button",
