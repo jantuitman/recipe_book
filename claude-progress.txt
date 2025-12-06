@@ -705,3 +705,62 @@ Current Status: 48/100 features passing
 
 GIT COMMITS:
 - aab30d3: Implement steps editor reordering - feature 45 passing
+
+===========================================
+AI RECIPE BOOK - CODING SESSION 7
+===========================================
+Date: 2025-12-06
+Agent: Coding Agent
+Status: IN PROGRESS
+
+ACCOMPLISHED TASKS:
+===================
+
+1. ✅ Verified existing tests still passing
+   - All 89 tests passing (281 assertions)
+   - No regressions from previous sessions
+
+2. ✅ Implemented ingredient quantity validation (Feature 40)
+   - Added real-time validation for quantity input fields
+   - Validates that quantity is a positive number
+   - Shows error message "Quantity must be a positive number" below field
+   - Adds red border (border-red-500) to invalid fields
+   - Error clears automatically when valid number entered
+   - Validation triggers on both input and blur events
+   - Restructured ingredient row to use flex-col for error message
+   - Updated delete button onclick to account for new structure
+
+3. ✅ Browser verified validation with Playwright
+   - Registered test user "Validation Test User"
+   - Navigated to recipe creation page
+   - Clicked "Enter Manually" to show preview
+   - Added ingredient rows
+   - Tested invalid input: "not a number" shows error ✓
+   - Tested valid input: "2.5" clears error ✓
+   - Screenshot evidence: ingredient-validation-error.png
+
+CURRENT FEATURE STATUS:
+=======================
+- Total features: 100
+- Passing: 49 (up from 48)
+- Pending: 51
+
+Features marked passing this session:
+- Feature 40: Ingredient editor validates quantity is numeric
+
+TEST RESULTS:
+=============
+All tests still passing:
+- Total: 89 tests, 281 assertions
+- No regressions introduced
+
+BROWSER TEST EVIDENCE:
+======================
+Screenshot saved: .playwright-mcp/ingredient-validation-error.png
+- Shows first ingredient with valid quantity (2.5)
+- Shows second ingredient with invalid text "not a number"
+- Red error message displayed: "Quantity must be a positive number"
+
+GIT COMMITS:
+============
+- 018b569: Implement ingredient quantity validation - feature 40 passing
