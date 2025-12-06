@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Recipe;
 use App\Models\RecipeVersion;
 use App\Models\ChatMessage;
+use App\Models\Comment;
+use App\Services\OpenAiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -308,5 +310,74 @@ class RecipeController extends Controller
             'version_number' => $newVersionNumber,
             'redirect_url' => route('recipes.show', $recipe)
         ]);
+    }
+
+    /**
+     * Generate improvement suggestions based on a comment's feedback.
+     */
+    public function improveFromComment(Request $request, Recipe $recipe, Comment $comment)
+    {
+        $this->authorize('update', $recipe);
+
+        // Verify the comment belongs to this recipe
+        $commentVersion = $comment->recipeVersion;
+        if (!$commentVersion || $commentVersion->recipe_id !== $recipe->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Comment does not belong to this recipe.'
+            ], 400);
+        }
+
+        // Verify it's a feedback comment
+        if (!$comment->has_feedback) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This comment does not contain feedback.'
+            ], 400);
+        }
+
+        try {
+            $openAiService = app(OpenAiService::class);
+
+            // Get the latest version of the recipe
+            $latestVersion = $recipe->versions()->orderBy('version_number', 'desc')->first();
+
+            // Build recipe data for improvement
+            $recipeData = [
+                'name' => $recipe->name,
+                'servings' => $latestVersion->servings,
+                'ingredients' => $latestVersion->ingredients,
+                'steps' => $latestVersion->steps,
+            ];
+
+            // Get AI suggestions using comment content as feedback
+            $suggestions = $openAiService->improveRecipe($recipeData, $comment->content);
+
+            // Store suggestions in session with comment_id for later application
+            session()->put('recipe_suggestions_' . $recipe->id, [
+                'suggestions' => $suggestions,
+                'feedback' => $comment->content,
+                'comment_id' => $comment->id,
+                'timestamp' => now()->toIso8601String()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "I've analyzed your feedback and prepared some improvements.",
+                'suggestions' => $suggestions
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Recipe improvement from comment failed', [
+                'recipe_id' => $recipe->id,
+                'comment_id' => $comment->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, I encountered an error generating improvements. Please try again.'
+            ], 500);
+        }
     }
 }

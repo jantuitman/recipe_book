@@ -209,6 +209,48 @@ class OpenAiService
         }
     }
 
+    /**
+     * Detect if a comment contains feedback/improvement suggestions for a recipe
+     *
+     * @param string $commentText The comment text to analyze
+     * @return bool True if the comment contains feedback that could improve the recipe
+     */
+    public function detectFeedback(string $commentText): bool
+    {
+        // Skip very short comments - unlikely to be feedback
+        if (strlen(trim($commentText)) < 15) {
+            return false;
+        }
+
+        $this->logger->info('Detecting feedback in comment', ['length' => strlen($commentText)]);
+
+        try {
+            $response = $this->client->chat()->create([
+                'model' => config('services.openai.model', 'gpt-4o-mini'),
+                'messages' => [
+                    ['role' => 'system', 'content' => $this->getFeedbackDetectionPrompt()],
+                    ['role' => 'user', 'content' => $commentText]
+                ],
+                'temperature' => 0.1,
+                'response_format' => ['type' => 'json_object'],
+            ]);
+
+            $content = $response->choices[0]->message->content;
+            $result = json_decode($content, true);
+
+            $hasFeedback = isset($result['has_feedback']) && $result['has_feedback'] === true;
+
+            $this->logger->info('Feedback detection complete', ['has_feedback' => $hasFeedback]);
+
+            return $hasFeedback;
+
+        } catch (\Exception $e) {
+            $this->logger->error('Feedback detection failed', ['error' => $e->getMessage()]);
+            // On error, default to false (don't show button)
+            return false;
+        }
+    }
+
     // System prompts and prompt templates
 
     private function getRecipeParserSystemPrompt(): string
@@ -340,6 +382,28 @@ User feedback:
 {$feedback}
 
 Modify the recipe to address the feedback. Return the updated ingredients, steps, and a summary of changes.
+PROMPT;
+    }
+
+    private function getFeedbackDetectionPrompt(): string
+    {
+        return <<<'PROMPT'
+You analyze comments on recipes to detect if they contain feedback or suggestions for improvement.
+
+Feedback includes:
+- Suggestions to change ingredients (more/less, substitute, add, remove)
+- Suggestions to change cooking times or temperatures
+- Complaints about taste, texture, or results that imply changes needed
+- Specific improvement ideas
+- Requests to make it healthier, easier, faster, etc.
+
+NOT feedback (just comments):
+- Simple compliments like "Delicious!", "Loved it!", "Great recipe!"
+- Questions without improvement suggestions
+- Personal stories about making the recipe
+- Simple ratings or reactions
+
+Return JSON: {"has_feedback": true} or {"has_feedback": false}
 PROMPT;
     }
 }

@@ -28,6 +28,7 @@ class Comment extends Model
         'user_id',
         'content',
         'is_ai',
+        'has_feedback',
         'result_version_id',
     ];
 
@@ -40,6 +41,7 @@ class Comment extends Model
     {
         return [
             'is_ai' => 'boolean',
+            'has_feedback' => 'boolean',
             'created_at' => 'datetime',
         ];
     }

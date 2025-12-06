@@ -184,6 +184,19 @@
                                                     </a>
                                                 </div>
                                             @endif
+
+                                            {{-- Show "Improve recipe" button for feedback comments on latest version --}}
+                                            @if($comment->has_feedback && !$comment->is_ai && !$comment->result_version_id && $comment->recipe_version_id === $latestVersion->id)
+                                                <div class="mt-3 pt-3 border-t border-gray-200" id="improve-actions-{{ $comment->id }}">
+                                                    <button type="button"
+                                                            onclick="improveFromComment({{ $recipe->id }}, {{ $comment->id }})"
+                                                            class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#6fa088] focus:bg-[#6fa088] active:bg-[#5d8876] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        🔧 Verbeter recept!
+                                                    </button>
+                                                </div>
+                                                <!-- Container for inline suggestions -->
+                                                <div id="suggestions-container-{{ $comment->id }}" class="hidden mt-4"></div>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
@@ -202,4 +215,133 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        // Generate improvement from a feedback comment
+        async function improveFromComment(recipeId, commentId) {
+            const actionsDiv = document.getElementById(`improve-actions-${commentId}`);
+            const suggestionsContainer = document.getElementById(`suggestions-container-${commentId}`);
+
+            // Show loading state
+            actionsDiv.innerHTML = '<span class="text-gray-600">Generating improvements...</span>';
+
+            try {
+                const response = await fetch(`/recipes/${recipeId}/comments/${commentId}/improve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showSuggestionsInline(recipeId, commentId, data.suggestions);
+                } else {
+                    actionsDiv.innerHTML = `<span class="text-red-600">${data.message}</span>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                actionsDiv.innerHTML = '<span class="text-red-600">Error generating improvements. Please try again.</span>';
+            }
+        }
+
+        // Display suggestions inline below the comment
+        function showSuggestionsInline(recipeId, commentId, suggestions) {
+            const actionsDiv = document.getElementById(`improve-actions-${commentId}`);
+            const suggestionsContainer = document.getElementById(`suggestions-container-${commentId}`);
+
+            // Hide the original button
+            actionsDiv.classList.add('hidden');
+
+            // Build suggestions preview
+            let ingredientsHtml = suggestions.ingredients.map(i =>
+                `<li>${i.quantity} ${i.unit} ${i.name}</li>`
+            ).join('');
+
+            let stepsHtml = suggestions.steps.map(s =>
+                `<li>${s.instruction}</li>`
+            ).join('');
+
+            suggestionsContainer.innerHTML = `
+                <div class="bg-[#F4F1DE] border border-[#81B29A] rounded-lg p-4">
+                    <h4 class="font-semibold text-lg mb-2" style="color: #3D405B;">Suggested Improvements</h4>
+                    <p class="text-gray-700 mb-4">${suggestions.change_summary}</p>
+
+                    <div class="mb-4">
+                        <h5 class="font-semibold text-sm mb-1" style="color: #E07A5F;">Updated Ingredients:</h5>
+                        <ul class="list-disc list-inside text-sm text-gray-700">${ingredientsHtml}</ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="font-semibold text-sm mb-1" style="color: #E07A5F;">Updated Steps:</h5>
+                        <ol class="list-decimal list-inside text-sm text-gray-700">${stepsHtml}</ol>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="applyImprovement(${recipeId}, ${commentId})"
+                                class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#6fa088] focus:bg-[#6fa088] active:bg-[#5d8876] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
+                            ✓ Apply Changes
+                        </button>
+                        <button onclick="cancelImprovement(${commentId})"
+                                class="inline-flex items-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 focus:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition ease-in-out duration-150">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            suggestionsContainer.classList.remove('hidden');
+        }
+
+        // Apply the improvement (create new version)
+        async function applyImprovement(recipeId, commentId) {
+            const suggestionsContainer = document.getElementById(`suggestions-container-${commentId}`);
+
+            try {
+                const response = await fetch(`/recipes/${recipeId}/apply-suggestions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert(data.message || 'Error applying changes');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error applying changes. Please try again.');
+            }
+        }
+
+        // Cancel improvement and restore original button
+        function cancelImprovement(commentId) {
+            const actionsDiv = document.getElementById(`improve-actions-${commentId}`);
+            const suggestionsContainer = document.getElementById(`suggestions-container-${commentId}`);
+            const recipeId = {{ $recipe->id }};
+
+            // Restore original button
+            actionsDiv.innerHTML = `
+                <button type="button"
+                        onclick="improveFromComment(${recipeId}, ${commentId})"
+                        class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#6fa088] focus:bg-[#6fa088] active:bg-[#5d8876] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
+                    🔧 Verbeter recept!
+                </button>
+            `;
+            actionsDiv.classList.remove('hidden');
+
+            // Hide suggestions
+            suggestionsContainer.classList.add('hidden');
+            suggestionsContainer.innerHTML = '';
+        }
+    </script>
+    @endpush
 </x-app-layout>

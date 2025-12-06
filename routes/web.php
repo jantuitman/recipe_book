@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 
     // Comment routes
     Route::post('/recipes/{recipe}/versions/{version}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/recipes/{recipe}/comments/{comment}/improve', [RecipeController::class, 'improveFromComment'])->name('recipes.comments.improve');
 
     // Chat routes
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
