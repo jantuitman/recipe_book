@@ -1,0 +1,883 @@
+<project_specification>
+  <project_name>AI Recipe Book</project_name>
+
+  <overview>
+    A personal recipe book application with AI-powered features. Users can store,
+    organize, and improve their recipes with help from OpenAI's GPT models.
+
+    Key features:
+    - User authentication (registration/login, no email verification needed)
+    - Personal recipe collection per user
+    - AI-powered recipe parsing: paste unstructured text, AI extracts ingredients and steps
+    - AI chat interface to brainstorm and create new recipes
+    - Recipe versioning with feedback/improvement workflow
+    - Comments on recipe versions linking AI suggestions to resulting versions
+    - User settings for unit display preferences (metric/imperial conversion)
+    - Client-side serving size modifier to scale ingredient quantities
+  </overview>
+
+  <technology_stack>
+    <backend>
+      <framework>Laravel 12.x with PHP 8.3</framework>
+      <database>MariaDB</database>
+      <authentication>Laravel built-in authentication (no email verification)</authentication>
+      <ai_integration>OpenAI PHP client (openai-php/client via Composer)</ai_integration>
+    </backend>
+    <frontend>
+      <templates>Blade templates</templates>
+      <javascript>Vanilla JavaScript with StimulusJS</javascript>
+      <css>Vanilla CSS (no frameworks)</css>
+    </frontend>
+    <testing>
+      <backend>PHPUnit / Pest</backend>
+      <frontend>Playwright browser automation</frontend>
+    </testing>
+  </technology_stack>
+
+  <api_keys>
+    <!-- API keys are stored in secrets.txt (gitignored, not committed) -->
+    <!-- The initializer agent will copy secrets.txt contents to .env -->
+    <!-- Required keys: OPENAI_API_KEY -->
+  </api_keys>
+
+  <features>
+    <!-- Authentication -->
+    <feature category="auth">
+      <name>User Registration</name>
+      <description>
+        Registration form with name, email, password, password confirmation.
+        No email verification required - user is logged in immediately after registration.
+        Redirect to recipe dashboard after successful registration.
+      </description>
+    </feature>
+
+    <feature category="auth">
+      <name>User Login</name>
+      <description>
+        Login form with email and password.
+        Remember me checkbox.
+        Redirect to recipe dashboard after successful login.
+        Show error message for invalid credentials.
+      </description>
+    </feature>
+
+    <feature category="auth">
+      <name>User Logout</name>
+      <description>
+        Logout button in navigation.
+        Clear session and redirect to home page.
+      </description>
+    </feature>
+
+    <!-- Recipe Management -->
+    <feature category="database">
+      <name>Recipe Data Model</name>
+      <description>
+        Recipes table with: id, user_id, name, description, created_at, updated_at.
+        Recipe versions table with: id, recipe_id, version_number, ingredients (JSON),
+        steps (JSON), created_at.
+        Each recipe has multiple versions. The latest version is the "current" one.
+        Ingredients JSON structure: array of {name, quantity, unit}.
+        Steps JSON structure: array of {step_number, instruction}.
+      </description>
+    </feature>
+
+    <feature category="database">
+      <name>Comments Data Model</name>
+      <description>
+        Comments table with: id, recipe_version_id, user_id (nullable for AI),
+        content, is_ai (boolean), result_version_id (nullable - links to the version
+        created as result of this comment/feedback), created_at.
+
+        When AI modifies a recipe based on feedback, the AI's comment explaining
+        the changes stores the result_version_id pointing to the new version.
+      </description>
+    </feature>
+
+    <feature category="database">
+      <name>Chat Messages Data Model</name>
+      <description>
+        Chat messages table with: id, user_id, role (user/assistant), content,
+        recipe_id (nullable - if chat resulted in recipe creation), created_at.
+        Stores the conversation history for each user's AI chat.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Dashboard</name>
+      <description>
+        Main dashboard showing user's recipe collection.
+        Grid or list view of recipe cards with name and brief description.
+        Search box to filter recipes by name or ingredients.
+        "New Recipe" button.
+        "AI Chat" button to open chat interface.
+        Navigation with user name and logout button.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Search</name>
+      <description>
+        Search input on dashboard that filters recipes in real-time.
+        Search by recipe name (partial match).
+        Search by ingredient name (searches within ingredients JSON).
+        Show "No recipes found" message when search has no results.
+        Use StimulusJS for live filtering without page reload.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>New Recipe Form - Text Input</name>
+      <description>
+        Page with large textarea for pasting unstructured recipe text.
+        User pastes text like "2 cups flour, 1 egg, mix together and bake at 350F".
+        "Parse with AI" button sends text to OpenAI for structuring.
+        Loading spinner while AI processes.
+        Recipe name input field (user can edit before saving).
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>AI Recipe Parser</name>
+      <description>
+        Backend endpoint that receives unstructured recipe text.
+        Sends to OpenAI API with prompt to extract:
+        - Recipe name suggestion
+        - List of ingredients with quantities and units
+        - Numbered preparation steps
+        Returns structured JSON to frontend.
+        Handle API errors gracefully with user-friendly messages.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Preview and Edit</name>
+      <description>
+        After AI parsing, show structured preview:
+        - Editable recipe name
+        - Ingredients table (name, quantity, unit) - rows can be edited/deleted/added
+        - Steps list - can be edited/reordered/deleted/added
+        "Save Recipe" button to store in database.
+        "Try Again" button to go back and modify input text.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Detail View</name>
+      <description>
+        Full recipe page showing:
+        - Recipe name as title
+        - Version indicator (e.g., "Version 3")
+        - Ingredients list with quantities and units
+        - Numbered preparation steps
+        - "Give Feedback" button to open feedback chat
+        - "View History" button to see all versions
+        - "Edit" button (creates new version)
+        - "Delete" button with confirmation
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Version History</name>
+      <description>
+        List of all versions of a recipe.
+        Each version shows: version number, date created, change summary.
+        Click version to view that specific version.
+        Show comments/feedback that led to each version.
+        Visual indicator for current (latest) version.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Comments Display</name>
+      <description>
+        Comments section on recipe detail page.
+        Show all comments for current version.
+        User comments show user name and date.
+        AI comments show "AI Assistant" and date.
+        AI comments that resulted in a new version show link: "This feedback led to Version X".
+        Chronological order, newest at bottom.
+      </description>
+    </feature>
+
+    <!-- AI Chat Features -->
+    <feature category="ui">
+      <name>AI Chat Interface</name>
+      <description>
+        Full-page chat interface with message history.
+        Input field at bottom for typing messages.
+        Send button (and Enter key to send).
+        Messages display with user on right, AI on left.
+        Auto-scroll to newest message.
+        Loading indicator while AI responds.
+        Chat persists across sessions (stored in database).
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>AI Chat Backend</name>
+      <description>
+        Endpoint to send message and receive AI response.
+        Maintains conversation context (sends recent history to OpenAI).
+        System prompt instructs AI it's a cooking assistant.
+        AI can suggest recipes, answer cooking questions, help with substitutions.
+        Detects when AI suggests a complete recipe.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Save Recipe from Chat</name>
+      <description>
+        When AI suggests a recipe in chat, show "Save this recipe" button.
+        Button appears below AI message containing recipe.
+        Clicking opens preview/edit screen with AI's recipe pre-filled.
+        After saving, chat message is linked to the created recipe.
+        Show "Recipe saved!" confirmation with link to view it.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Recipe Feedback Chat</name>
+      <description>
+        From recipe detail page, "Give Feedback" opens feedback mode.
+        Chat interface pre-loaded with recipe context.
+        User describes what they'd change: "too salty", "needs more time", etc.
+        AI asks clarifying questions if needed.
+        AI proposes specific changes to ingredients/steps.
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>AI Recipe Improvement</name>
+      <description>
+        Backend processes feedback conversation.
+        AI suggests modifications to recipe.
+        When user approves, create new version with changes.
+        AI generates summary of what changed.
+        Store AI comment with result_version_id linking to new version.
+        Return new version details to frontend.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Apply AI Suggestions</name>
+      <description>
+        After AI proposes changes, show "Apply these changes" button.
+        Preview diff: what will be added/removed/modified.
+        "Apply" creates new version.
+        "Modify" lets user adjust before applying.
+        "Cancel" returns to recipe without changes.
+        After applying, redirect to updated recipe detail page.
+      </description>
+    </feature>
+
+    <!-- Navigation and Layout -->
+    <feature category="ui">
+      <name>Navigation Bar</name>
+      <description>
+        Fixed top navigation bar.
+        Logo/app name "AI Recipe Book" links to dashboard.
+        When logged in: "My Recipes", "AI Chat", user name dropdown with Logout.
+        When logged out: "Login", "Register" links.
+        Mobile responsive: hamburger menu on small screens.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Home Page</name>
+      <description>
+        Public landing page for non-authenticated users.
+        Hero section explaining the app.
+        Features overview: AI parsing, chat, versioning.
+        Call-to-action buttons: "Get Started" (register), "Login".
+        Responsive design.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Mobile Responsive Design</name>
+      <description>
+        All pages work on mobile devices.
+        Recipe cards stack vertically on small screens.
+        Chat interface full-screen on mobile.
+        Touch-friendly buttons and inputs.
+        Readable font sizes.
+      </description>
+    </feature>
+
+    <!-- Additional Features -->
+    <feature category="js">
+      <name>Ingredient Editor with StimulusJS</name>
+      <description>
+        Interactive ingredient table using StimulusJS controller.
+        Add new ingredient row button.
+        Delete button per row.
+        Inline editing of quantity, unit, name.
+        Validate that quantity is numeric.
+        Common unit suggestions (cups, tbsp, tsp, g, kg, ml, L, pieces).
+      </description>
+    </feature>
+
+    <feature category="js">
+      <name>Steps Editor with StimulusJS</name>
+      <description>
+        Interactive steps list using StimulusJS controller.
+        Add new step button.
+        Delete button per step.
+        Drag-and-drop reordering (or up/down buttons).
+        Auto-renumber steps after reorder.
+        Textarea for each step instruction.
+      </description>
+    </feature>
+
+    <feature category="js">
+      <name>Chat Message Streaming</name>
+      <description>
+        AI responses appear word-by-word as they stream in.
+        Use Server-Sent Events or polling for streaming effect.
+        Smooth typing animation.
+        Cancel button to stop generation.
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>OpenAI Service Class</name>
+      <description>
+        Laravel service class wrapping OpenAI API calls.
+        Methods: parseRecipeText(), chatResponse(), improveRecipe().
+        Configurable model (gpt-4o-mini default for cost efficiency).
+        Error handling with retry logic.
+        Rate limiting consideration.
+        Logs API usage for debugging.
+      </description>
+    </feature>
+
+    <feature category="database">
+      <name>Database Migrations</name>
+      <description>
+        Migration for recipes table.
+        Migration for recipe_versions table.
+        Migration for comments table.
+        Migration for chat_messages table.
+        Foreign key constraints with cascade delete.
+        Indexes on user_id and recipe_id for performance.
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>Recipe CRUD Tests</name>
+      <description>
+        PHPUnit tests for recipe creation, reading, updating, deletion.
+        Test that users can only see their own recipes.
+        Test version creation when recipe is modified.
+        Test cascade delete removes versions and comments.
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>Authentication Tests</name>
+      <description>
+        Test registration creates user and logs in.
+        Test login with valid credentials.
+        Test login rejection with invalid credentials.
+        Test protected routes redirect to login.
+        Test logout clears session.
+      </description>
+    </feature>
+
+    <feature category="style">
+      <name>Recipe Card Styling</name>
+      <description>
+        Recipe cards with subtle shadow and hover effect.
+        Recipe name as card title.
+        Truncated description preview.
+        Visual indicator of recipe category if applicable.
+        Consistent card sizing in grid.
+      </description>
+    </feature>
+
+    <feature category="style">
+      <name>Chat Interface Styling</name>
+      <description>
+        Modern chat bubble design.
+        User messages: right-aligned, primary color background.
+        AI messages: left-aligned, light gray background.
+        Timestamp below each message.
+        Smooth scroll behavior.
+        Input field with rounded corners and send button.
+      </description>
+    </feature>
+
+    <feature category="style">
+      <name>Form Styling</name>
+      <description>
+        Consistent form styling across all forms.
+        Clear labels above inputs.
+        Focus states with primary color outline.
+        Error messages in red below invalid fields.
+        Submit buttons with primary color.
+        Disabled state for buttons during loading.
+      </description>
+    </feature>
+
+    <!-- Unit Conversion and Settings -->
+    <feature category="database">
+      <name>User Settings Data Model</name>
+      <description>
+        User settings stored in users table or separate user_settings table.
+        Settings fields:
+        - volume_unit: enum (ml, cups, fl_oz) - default ml
+        - weight_unit: enum (g, oz, lbs) - default g
+        - time_unit: enum (min, hr_min) - default min (hr_min shows "1h 30m")
+
+        Database always stores values in metric units:
+        - Volume: milliliters (ml)
+        - Weight: grams (g)
+        - Time: minutes (min)
+
+        Conversion happens in frontend display only.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>User Settings Page</name>
+      <description>
+        Settings page accessible from user dropdown in navigation.
+        Section: "Display Units"
+        - Volume dropdown: Milliliters (ml), Cups, Fluid Ounces (fl oz)
+        - Weight dropdown: Grams (g), Ounces (oz), Pounds (lbs)
+        - Time display: Minutes only, Hours and minutes
+
+        Save button with success message.
+        Settings apply immediately after save.
+        Mobile responsive layout.
+      </description>
+    </feature>
+
+    <feature category="js">
+      <name>Unit Conversion Service</name>
+      <description>
+        JavaScript/StimulusJS service for unit conversion.
+        Conversion tables:
+        - 1 cup = 236.588 ml
+        - 1 fl oz = 29.5735 ml
+        - 1 oz = 28.3495 g
+        - 1 lb = 453.592 g
+
+        Functions:
+        - convertVolume(ml, targetUnit) -> {value, unit}
+        - convertWeight(g, targetUnit) -> {value, unit}
+        - formatTime(minutes, format) -> string
+
+        Smart rounding: show 1 decimal for small quantities, whole numbers for large.
+        Example: 236.588ml -> "1 cup", 15g -> "0.5 oz"
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Ingredient Display with User Units</name>
+      <description>
+        Recipe detail page shows ingredients in user's preferred units.
+        Database stores: {name: "flour", quantity: 250, unit: "g"}
+        User with weight_unit=oz sees: "8.8 oz flour"
+        User with weight_unit=g sees: "250 g flour"
+
+        Unit type detection based on stored unit:
+        - ml, l -> volume conversion
+        - g, kg -> weight conversion
+        - min, hr -> time conversion
+        - pieces, stuks, etc. -> no conversion (display as-is)
+
+        Conversion happens client-side via StimulusJS.
+        Data attributes store original metric values.
+      </description>
+    </feature>
+
+    <feature category="database">
+      <name>Recipe Servings Field</name>
+      <description>
+        Add servings field to recipe_versions table.
+        Default servings: 4
+        Stored as integer.
+
+        AI parser should extract serving count from recipe text if mentioned.
+        Example: "Serves 6" -> servings: 6
+        If not found, default to 4.
+      </description>
+    </feature>
+
+    <feature category="ui">
+      <name>Serving Size Modifier</name>
+      <description>
+        On recipe detail page, show serving size control.
+        Display: "Servings: [4] [-] [+]" or dropdown/number input.
+        Default shows recipe's base servings.
+
+        When user changes servings:
+        - Calculate multiplier: new_servings / base_servings
+        - Example: recipe for 4, user sets 6 -> multiplier = 1.5
+        - All ingredient quantities multiplied by this factor
+        - Display updated quantities (after unit conversion)
+
+        Client-side only - doesn't modify database.
+        Reset button to return to original servings.
+        Persist selection in sessionStorage for current recipe.
+      </description>
+    </feature>
+
+    <feature category="js">
+      <name>Serving Multiplier Controller</name>
+      <description>
+        StimulusJS controller for serving size adjustment.
+        Targets: serving input, all ingredient quantity elements.
+        Actions:
+        - increase() - increment servings
+        - decrease() - decrement servings (minimum 1)
+        - change() - handle direct input
+
+        On change:
+        - Read base quantities from data-base-quantity attributes
+        - Calculate scaled quantities
+        - Apply unit conversion
+        - Update displayed values
+
+        Works together with unit conversion service.
+        Smooth number transitions (optional animation).
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>AI Parser Metric Normalization</name>
+      <description>
+        When AI parses recipe text, normalize all units to metric.
+        Input: "2 cups flour, 4 oz butter, bake for 1 hour"
+        Output: {
+          ingredients: [
+            {name: "flour", quantity: 473, unit: "ml"},
+            {name: "butter", quantity: 113, unit: "g"}
+          ],
+          steps: [...includes "bake for 60 minutes"...]
+        }
+
+        AI prompt instructs to:
+        - Convert all volumes to ml
+        - Convert all weights to g
+        - Convert all times to minutes
+        - Preserve original text in step descriptions but use metric in structured data
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>Unit Conversion Tests</name>
+      <description>
+        Test unit conversion accuracy.
+        Test edge cases: 0 values, very large values, very small values.
+        Test rounding behavior.
+        Test that unconvertible units pass through unchanged.
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>Serving Multiplier Tests</name>
+      <description>
+        Test quantity scaling calculations.
+        Test multiplier: 4 servings -> 6 servings = 1.5x
+        Test multiplier: 4 servings -> 2 servings = 0.5x
+        Test that step text is not modified.
+        Test minimum serving size is 1.
+      </description>
+    </feature>
+
+    <!-- AI/LLM Tests -->
+    <feature category="test">
+      <name>AI Service Mock Tests</name>
+      <description>
+        Unit tests for OpenAI service class using mocked HTTP responses.
+        Mock the OpenAI API client to return predefined responses.
+
+        Test cases with mocks:
+        - parseRecipeText() returns structured JSON for valid input
+        - parseRecipeText() handles malformed AI response gracefully
+        - chatResponse() maintains conversation context
+        - improveRecipe() generates valid recipe modifications
+        - All methods handle API timeout gracefully
+        - All methods handle rate limit errors (429) with appropriate message
+        - All methods handle invalid API key error (401)
+
+        Use Laravel's Http::fake() or mock the OpenAI client directly.
+        These tests run fast and don't require real API key.
+        Should be included in CI/CD pipeline.
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>AI Integration Tests (Real LLM)</name>
+      <description>
+        Integration tests that call the real OpenAI API.
+        These tests verify that prompts actually work with the LLM.
+
+        Mark these tests with @group integration so they can be skipped in CI.
+        Only run when OPENAI_API_KEY is set in environment.
+
+        Test cases:
+        - Recipe parser extracts ingredients from real recipe text
+        - Recipe parser converts units to metric correctly
+        - Recipe parser extracts serving count when mentioned
+        - Chat responds appropriately to cooking questions
+        - Chat can generate a complete recipe when asked
+        - Improvement suggestions are relevant to feedback given
+
+        Example test:
+        ```php
+        /** @group integration */
+        public function test_parser_extracts_real_recipe()
+        {
+            $text = "Pancakes for 4. Mix 2 cups flour, 2 eggs, 1 cup milk.
+                     Cook on griddle for 3 minutes each side.";
+
+            $result = $this->openAiService->parseRecipeText($text);
+
+            $this->assertEquals(4, $result['servings']);
+            $this->assertCount(3, $result['ingredients']);
+            // flour should be converted: 2 cups = ~473ml
+            $this->assertEquals('ml', $result['ingredients'][0]['unit']);
+        }
+        ```
+
+        These tests are slow and cost money - run manually during development.
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>AI Prompt Quality Tests</name>
+      <description>
+        Tests that verify AI prompt effectiveness.
+        Use real LLM calls to validate prompt engineering.
+
+        Test cases:
+        - Parser prompt handles recipes in different languages (Dutch, English)
+        - Parser prompt handles informal measurements ("a pinch of salt")
+        - Parser prompt doesn't hallucinate extra ingredients
+        - Chat system prompt keeps AI focused on cooking topics
+        - Improvement prompt generates actionable recipe changes
+
+        Each test should check:
+        - Response contains expected structure
+        - Response doesn't contain unexpected/harmful content
+        - Response is in expected language
+
+        Mark with @group integration and @group prompts.
+      </description>
+    </feature>
+
+    <feature category="api">
+      <name>OpenAI Service Testability</name>
+      <description>
+        Design OpenAI service class to be easily testable.
+
+        Requirements:
+        - Inject HTTP client via constructor (for mocking)
+        - Separate prompt templates into config or constants
+        - Return typed DTOs instead of raw arrays
+        - Log all API calls with request/response for debugging
+
+        Example structure:
+        ```php
+        class OpenAiService
+        {
+            public function __construct(
+                private Client $client,  // Can be mocked
+                private LoggerInterface $logger
+            ) {}
+
+            public function parseRecipeText(string $text): ParsedRecipe
+            {
+                $this->logger->info('Parsing recipe', ['length' => strlen($text)]);
+                // ... API call ...
+                $this->logger->info('Parse complete', ['ingredients' => count($result)]);
+                return new ParsedRecipe(...);
+            }
+        }
+        ```
+
+        This allows easy mocking in tests:
+        ```php
+        $mockClient = $this->createMock(Client::class);
+        $mockClient->method('chat->create')->willReturn($fakeResponse);
+        $service = new OpenAiService($mockClient, $logger);
+        ```
+      </description>
+    </feature>
+
+    <feature category="test">
+      <name>Playwright AI Feature Tests</name>
+      <description>
+        End-to-end browser tests for AI features using Playwright.
+        These use mocked AI responses (not real LLM).
+
+        Test scenarios:
+        - User pastes recipe text, sees loading spinner, then structured preview
+        - User can edit parsed ingredients before saving
+        - Chat interface shows AI responses with proper formatting
+        - "Save recipe" button appears when AI suggests a recipe in chat
+        - Feedback flow: user gives feedback -> AI suggests changes -> user applies
+
+        Mock approach for Playwright:
+        - Set up test route that returns canned AI responses
+        - Or use Laravel's Http::fake() in test setup
+        - AI response delay can be simulated for UX testing
+
+        These tests verify the UI works correctly independent of AI quality.
+      </description>
+    </feature>
+  </features>
+
+  <design_guidelines>
+    <colors>
+      <primary>#E07A5F</primary> <!-- Warm terracotta - appetizing/food-related -->
+      <secondary>#3D405B</secondary> <!-- Dark slate -->
+      <accent>#81B29A</accent> <!-- Sage green - fresh/herbs -->
+      <background>#F4F1DE</background> <!-- Warm cream -->
+      <text>#1F2937</text>
+      <error>#DC2626</error>
+      <success>#059669</success>
+    </colors>
+    <typography>
+      <font_family>system-ui, -apple-system, sans-serif</font_family>
+      <heading_font>Georgia, serif</heading_font> <!-- Elegant for recipe titles -->
+      <base_size>16px</base_size>
+    </typography>
+    <spacing>
+      <base>1rem</base>
+      <small>0.5rem</small>
+      <large>2rem</large>
+    </spacing>
+  </design_guidelines>
+
+  <database_schema>
+    <table name="users">
+      <column>id - bigint, primary key</column>
+      <column>name - string</column>
+      <column>email - string, unique</column>
+      <column>email_verified_at - timestamp, nullable</column>
+      <column>password - string</column>
+      <column>remember_token - string, nullable</column>
+      <column>volume_unit - enum (ml, cups, fl_oz), default 'ml'</column>
+      <column>weight_unit - enum (g, oz, lbs), default 'g'</column>
+      <column>time_format - enum (min, hr_min), default 'min'</column>
+      <column>created_at - timestamp</column>
+      <column>updated_at - timestamp</column>
+    </table>
+
+    <table name="recipes">
+      <column>id - bigint, primary key</column>
+      <column>user_id - bigint, foreign key to users</column>
+      <column>name - string</column>
+      <column>description - text, nullable</column>
+      <column>created_at - timestamp</column>
+      <column>updated_at - timestamp</column>
+    </table>
+
+    <table name="recipe_versions">
+      <column>id - bigint, primary key</column>
+      <column>recipe_id - bigint, foreign key to recipes</column>
+      <column>version_number - integer</column>
+      <column>servings - integer, default 4 (base number of servings)</column>
+      <column>ingredients - json (array of {name, quantity, unit}) - quantities always in metric (ml, g, min)</column>
+      <column>steps - json (array of {step_number, instruction})</column>
+      <column>change_summary - text, nullable (what changed from previous version)</column>
+      <column>created_at - timestamp</column>
+    </table>
+
+    <table name="comments">
+      <column>id - bigint, primary key</column>
+      <column>recipe_version_id - bigint, foreign key to recipe_versions</column>
+      <column>user_id - bigint, nullable, foreign key to users</column>
+      <column>content - text</column>
+      <column>is_ai - boolean, default false</column>
+      <column>result_version_id - bigint, nullable, foreign key to recipe_versions</column>
+      <column>created_at - timestamp</column>
+    </table>
+
+    <table name="chat_messages">
+      <column>id - bigint, primary key</column>
+      <column>user_id - bigint, foreign key to users</column>
+      <column>role - enum (user, assistant)</column>
+      <column>content - text</column>
+      <column>recipe_id - bigint, nullable, foreign key to recipes</column>
+      <column>created_at - timestamp</column>
+    </table>
+  </database_schema>
+
+  <routes>
+    <!-- Public routes -->
+    <route method="GET" path="/" name="home">Home/landing page</route>
+    <route method="GET" path="/login" name="login">Login form</route>
+    <route method="POST" path="/login" name="login.store">Login action</route>
+    <route method="GET" path="/register" name="register">Registration form</route>
+    <route method="POST" path="/register" name="register.store">Registration action</route>
+    <route method="POST" path="/logout" name="logout">Logout action</route>
+
+    <!-- Protected routes (auth required) -->
+    <route method="GET" path="/dashboard" name="dashboard">Recipe dashboard</route>
+    <route method="GET" path="/recipes" name="recipes.index">List user's recipes (API)</route>
+    <route method="GET" path="/recipes/create" name="recipes.create">New recipe form</route>
+    <route method="POST" path="/recipes" name="recipes.store">Save new recipe</route>
+    <route method="GET" path="/recipes/{recipe}" name="recipes.show">View recipe detail</route>
+    <route method="GET" path="/recipes/{recipe}/edit" name="recipes.edit">Edit recipe form</route>
+    <route method="PUT" path="/recipes/{recipe}" name="recipes.update">Update recipe (new version)</route>
+    <route method="DELETE" path="/recipes/{recipe}" name="recipes.destroy">Delete recipe</route>
+    <route method="GET" path="/recipes/{recipe}/history" name="recipes.history">Version history</route>
+    <route method="GET" path="/recipes/{recipe}/versions/{version}" name="recipes.version">View specific version</route>
+
+    <!-- AI routes -->
+    <route method="POST" path="/ai/parse-recipe" name="ai.parse">Parse recipe text with AI</route>
+    <route method="GET" path="/chat" name="chat.index">AI chat interface</route>
+    <route method="POST" path="/chat" name="chat.store">Send chat message</route>
+    <route method="GET" path="/chat/messages" name="chat.messages">Get chat history (API)</route>
+    <route method="POST" path="/recipes/{recipe}/feedback" name="recipes.feedback">Submit feedback for AI improvement</route>
+    <route method="POST" path="/recipes/{recipe}/apply-suggestions" name="recipes.apply">Apply AI suggestions</route>
+
+    <!-- Comments -->
+    <route method="POST" path="/recipes/{recipe}/versions/{version}/comments" name="comments.store">Add comment</route>
+
+    <!-- User Settings -->
+    <route method="GET" path="/settings" name="settings.edit">User settings page</route>
+    <route method="PUT" path="/settings" name="settings.update">Update user settings</route>
+  </routes>
+
+  <success_criteria>
+    <criterion>User can register and login without email verification</criterion>
+    <criterion>User can paste unstructured text and AI extracts structured recipe</criterion>
+    <criterion>Recipes are stored with proper versioning</criterion>
+    <criterion>AI chat can suggest new recipes and save them</criterion>
+    <criterion>User can provide feedback on recipes and AI improves them</criterion>
+    <criterion>Comments track which AI suggestions led to which versions</criterion>
+    <criterion>Version history shows all changes to a recipe</criterion>
+    <criterion>Search works for recipe names and ingredients</criterion>
+    <criterion>All pages are mobile responsive</criterion>
+    <criterion>OpenAI integration works with error handling</criterion>
+    <criterion>User can configure display units in settings (ml/cups/fl_oz, g/oz/lbs)</criterion>
+    <criterion>Ingredients display in user's preferred units with correct conversion</criterion>
+    <criterion>Serving size modifier correctly scales all ingredient quantities</criterion>
+    <criterion>AI parser normalizes all units to metric for storage</criterion>
+  </success_criteria>
+</project_specification>
+
+<!--
+SETUP INSTRUCTIONS:
+==================
+
+1. Before running the agent, update the OpenAI API key in this file or set it in .env:
+   OPENAI_API_KEY=your-actual-api-key
+
+2. Install OpenAI PHP client:
+   composer require openai-php/client
+
+3. The agent will handle Laravel installation and database setup.
+
+4. Run the agent:
+   python agent/autonomous_agent_demo.py --project-dir projects/recipe_book --feature-count 75
+
+Note: Using --feature-count 75 to generate comprehensive test coverage for this larger app.
+-->
