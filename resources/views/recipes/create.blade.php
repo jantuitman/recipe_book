@@ -398,7 +398,19 @@ Instructions:
                     rows="2"
                     placeholder="Step instruction"
                     data-field="instruction">${step.instruction || ''}</textarea>
-                <button type="button" class="text-red-600 hover:text-red-800 p-2" onclick="this.parentElement.remove(); renumberSteps()">
+                <div class="flex flex-col gap-1">
+                    <button type="button" class="text-[#3D405B] hover:text-[#E07A5F] p-1" onclick="moveStepUp(this)" title="Move up">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                        </svg>
+                    </button>
+                    <button type="button" class="text-[#3D405B] hover:text-[#E07A5F] p-1" onclick="moveStepDown(this)" title="Move down">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button type="button" class="text-red-600 hover:text-red-800 p-2" onclick="this.parentElement.remove(); renumberSteps()" title="Delete step">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
@@ -424,6 +436,24 @@ Instructions:
             steps.forEach((step, index) => {
                 step.querySelector('span').textContent = index + 1;
             });
+        };
+
+        window.moveStepUp = function(button) {
+            const row = button.closest('.flex.gap-2.items-start');
+            const prev = row.previousElementSibling;
+            if (prev) {
+                row.parentNode.insertBefore(row, prev);
+                renumberSteps();
+            }
+        };
+
+        window.moveStepDown = function(button) {
+            const row = button.closest('.flex.gap-2.items-start');
+            const next = row.nextElementSibling;
+            if (next) {
+                row.parentNode.insertBefore(next, row);
+                renumberSteps();
+            }
         };
 
         function collectIngredients() {

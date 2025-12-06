@@ -641,7 +641,7 @@
       "id": 45,
       "description": "Steps editor allows reordering with up/down buttons",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview with 3 steps",
         "Click 'down' button on step 1",
