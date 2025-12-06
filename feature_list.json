@@ -865,7 +865,7 @@
       "id": 60,
       "description": "AI chat interface displays correctly",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to http://localhost:8000/chat",
@@ -880,7 +880,7 @@
       "id": 61,
       "description": "AI chat loads previous conversation history",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with 5 chat messages in database (artisan test)",
         "Login as that user (artisan test)",
@@ -895,7 +895,7 @@
       "id": 62,
       "description": "AI chat sends message and receives response",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -912,7 +912,7 @@
       "id": 63,
       "description": "AI chat maintains conversation context",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client (artisan test)",
         "Send first message to chat (artisan test)",
@@ -925,7 +925,7 @@
       "id": 64,
       "description": "AI chat shows loading indicator",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -941,7 +941,7 @@
       "id": 65,
       "description": "AI chat auto-scrolls to newest message",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with 20 chat messages (artisan test)",
         "Navigate to /chat",
@@ -954,7 +954,7 @@
       "id": 66,
       "description": "AI chat messages have proper styling",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with chat history (artisan test)",
         "Navigate to /chat",

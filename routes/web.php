@@ -25,8 +25,10 @@ Route::middleware('auth')->group(function () {
     // Comment routes
     Route::post('/recipes/{recipe}/versions/{version}/comments', [CommentController::class, 'store'])->name('comments.store');
 
-    // Chat route
+    // Chat routes
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
+    Route::get('/chat/messages', [ChatController::class, 'messages'])->name('chat.messages');
+    Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
 
     // AI API routes
     Route::post('/ai/parse-recipe', [RecipeParserController::class, 'parse'])->name('ai.parse-recipe');
