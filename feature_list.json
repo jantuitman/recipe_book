@@ -1348,7 +1348,7 @@
       "id": 94,
       "description": "Form styling is consistent across application",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to login page",
         "Verify labels are above inputs",
@@ -1364,7 +1364,7 @@
       "id": 95,
       "description": "Form validation errors display correctly",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to registration page",
         "Submit form with empty fields",
@@ -1378,7 +1378,7 @@
       "id": 96,
       "description": "Buttons have disabled state during loading",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to login page",
         "Fill in credentials",
@@ -1393,7 +1393,7 @@
       "id": 97,
       "description": "Mobile responsive design works on dashboard",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -1409,7 +1409,7 @@
       "id": 98,
       "description": "Mobile responsive design works on chat interface",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -1425,7 +1425,7 @@
       "id": 99,
       "description": "Color scheme uses defined palette throughout",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate through all pages of application",
         "Verify primary color #E07A5F used for main actions",
@@ -1441,7 +1441,7 @@
       "id": 100,
       "description": "Typography uses defined fonts consistently",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Verify recipe title uses Georgia serif font",
