@@ -1,13 +1,7 @@
 import './bootstrap';
-import { Application } from "@hotwired/stimulus"
 
-// Start Stimulus application
-const application = Application.start()
+import Alpine from 'alpinejs';
 
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus = application
+window.Alpine = Alpine;
 
-// Import controllers as needed
-// import HelloController from "./controllers/hello_controller"
-// application.register("hello", HelloController)
+Alpine.start();

@@ -77,7 +77,7 @@
       "id": 6,
       "description": "User model has relationships to recipes, comments, and chat messages",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify User model has recipes() hasMany relationship (artisan test)",
         "Verify User model has comments() hasMany relationship (artisan test)",
@@ -89,7 +89,7 @@
       "id": 7,
       "description": "Recipe model has relationships to user, versions, and comments",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify Recipe model has user() belongsTo relationship (artisan test)",
         "Verify Recipe model has versions() hasMany relationship (artisan test)",
@@ -101,7 +101,7 @@
       "id": 8,
       "description": "RecipeVersion model has relationships and JSON casting",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify RecipeVersion model has recipe() belongsTo relationship (artisan test)",
         "Verify RecipeVersion model has comments() hasMany relationship (artisan test)",
@@ -114,7 +114,7 @@
       "id": 9,
       "description": "Comment model has relationships including result version link",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify Comment model has recipeVersion() belongsTo relationship (artisan test)",
         "Verify Comment model has user() belongsTo relationship (artisan test)",
@@ -126,7 +126,7 @@
       "id": 10,
       "description": "ChatMessage model has relationships and role validation",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify ChatMessage model has user() belongsTo relationship (artisan test)",
         "Verify ChatMessage model has recipe() belongsTo relationship (artisan test)",
@@ -138,7 +138,7 @@
       "id": 11,
       "description": "User registration creates account and logs in automatically",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan serve --host=0.0.0.0",
         "Navigate to http://localhost:8000/register",
@@ -153,7 +153,7 @@
       "id": 12,
       "description": "User registration validates required fields",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Submit registration with empty name (artisan test)",
         "Verify validation error for name field (artisan test)",
@@ -169,7 +169,7 @@
       "id": 13,
       "description": "User registration prevents duplicate emails",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with email test@example.com (artisan test)",
         "Attempt to register another user with same email (artisan test)",
@@ -181,7 +181,7 @@
       "id": 14,
       "description": "User login authenticates with valid credentials",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create test user in database (artisan test)",
         "Navigate to http://localhost:8000/login",
@@ -195,7 +195,7 @@
       "id": 15,
       "description": "User login rejects invalid credentials",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/login",
         "Fill in email with wrong password",
@@ -224,7 +224,7 @@
       "id": 17,
       "description": "User logout clears session and redirects to home",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to dashboard",
@@ -239,7 +239,7 @@
       "id": 18,
       "description": "Protected routes require authentication",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Attempt to access /dashboard without authentication (artisan test)",
         "Verify redirect to login page (artisan test)",
