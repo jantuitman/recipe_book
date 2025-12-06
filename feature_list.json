@@ -1284,7 +1284,7 @@
       "id": 89,
       "description": "OpenAI service class is testable with dependency injection",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify OpenAI service accepts client in constructor (artisan test)",
         "Create mock client (artisan test)",
@@ -1298,7 +1298,7 @@
       "id": 90,
       "description": "OpenAI service logs API calls",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Inject mock logger into OpenAI service (artisan test)",
         "Call parseRecipeText method (artisan test)",
@@ -1311,7 +1311,7 @@
       "id": 91,
       "description": "OpenAI service handles timeout errors",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to throw timeout exception (artisan test)",
         "Call parseRecipeText method (artisan test)",
@@ -1324,7 +1324,7 @@
       "id": 92,
       "description": "OpenAI service handles rate limit errors",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to return 429 status (artisan test)",
         "Call chatResponse method (artisan test)",
@@ -1336,7 +1336,7 @@
       "id": 93,
       "description": "OpenAI service handles invalid API key error",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to return 401 status (artisan test)",
         "Call improveRecipe method (artisan test)",

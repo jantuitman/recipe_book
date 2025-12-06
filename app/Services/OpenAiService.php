@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Log;
 
 class OpenAiService
 {
-    private Client $client;
+    private $client;
     private LoggerInterface $logger;
 
-    public function __construct(Client $client = null, LoggerInterface $logger = null)
+    public function __construct($client = null, LoggerInterface $logger = null)
     {
         // Allow injection for testing, otherwise create default client
+        // Accept either OpenAI\Client or any object with a chat() method (for testing)
         $this->client = $client ?? \OpenAI::client(config('services.openai.api_key'));
         $this->logger = $logger ?? Log::channel('single');
     }
