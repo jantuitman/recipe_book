@@ -9,7 +9,7 @@
                    class="inline-flex items-center px-4 py-2 bg-[#E07A5F] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#d16850] focus:bg-[#d16850] active:bg-[#c25a45] focus:outline-none focus:ring-2 focus:ring-[#E07A5F] focus:ring-offset-2 transition ease-in-out duration-150">
                     {{ __('New Recipe') }}
                 </a>
-                <a href="#"
+                <a href="{{ route('chat') }}"
                    class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#72a38b] focus:bg-[#72a38b] active:bg-[#63947c] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
                     {{ __('AI Chat') }}
                 </a>
@@ -41,7 +41,7 @@
                                class="inline-flex items-center px-4 py-2 bg-[#E07A5F] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#d16850] focus:bg-[#d16850] active:bg-[#c25a45] focus:outline-none focus:ring-2 focus:ring-[#E07A5F] focus:ring-offset-2 transition ease-in-out duration-150">
                                 Create First Recipe
                             </a>
-                            <a href="#"
+                            <a href="{{ route('chat') }}"
                                class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#72a38b] focus:bg-[#72a38b] active:bg-[#63947c] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
                                 Chat with AI
                             </a>
