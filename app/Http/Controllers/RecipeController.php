@@ -194,4 +194,16 @@ class RecipeController extends Controller
 
         return view('recipes.show-version', compact('recipe', 'version', 'comments'));
     }
+
+    /**
+     * Show feedback chat interface for recipe improvement.
+     */
+    public function feedback(Recipe $recipe)
+    {
+        $this->authorize('view', $recipe);
+
+        $latestVersion = $recipe->versions()->orderBy('version_number', 'desc')->first();
+
+        return view('recipes.feedback', compact('recipe', 'latestVersion'));
+    }
 }

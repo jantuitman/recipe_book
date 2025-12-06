@@ -1010,7 +1010,7 @@
       "id": 70,
       "description": "Recipe feedback opens chat with context",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",

@@ -5,6 +5,10 @@
                 {{ $recipe->name }}
             </h2>
             <div class="flex gap-2">
+                <a href="{{ route('recipes.feedback', $recipe) }}"
+                   class="inline-flex items-center px-4 py-2 bg-[#E07A5F] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#d16850] focus:bg-[#d16850] active:bg-[#c25842] focus:outline-none focus:ring-2 focus:ring-[#E07A5F] focus:ring-offset-2 transition ease-in-out duration-150">
+                    Give Feedback
+                </a>
                 <a href="{{ route('recipes.history', $recipe) }}"
                    class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#6fa088] focus:bg-[#6fa088] active:bg-[#5d8876] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
                     View History
