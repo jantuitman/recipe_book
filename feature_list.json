@@ -982,7 +982,7 @@
       "id": 68,
       "description": "Save recipe button appears when AI suggests recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
