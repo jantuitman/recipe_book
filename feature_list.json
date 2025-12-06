@@ -299,7 +299,7 @@
       "id": 22,
       "description": "Recipe cards display with proper styling",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -345,7 +345,7 @@
       "id": 25,
       "description": "Recipe search shows 'no results' message",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -359,7 +359,7 @@
       "id": 26,
       "description": "Recipe search uses StimulusJS without page reload",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
