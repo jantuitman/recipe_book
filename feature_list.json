@@ -6,7 +6,7 @@
       "id": 1,
       "description": "Database migrations create users table with unit preference columns",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan migrate:fresh",
         "Verify users table exists (artisan test)",
@@ -20,7 +20,7 @@
       "id": 2,
       "description": "Database migrations create recipes table with foreign keys",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan migrate:fresh",
         "Verify recipes table exists (artisan test)",
@@ -33,7 +33,7 @@
       "id": 3,
       "description": "Database migrations create recipe_versions table with JSON columns",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan migrate:fresh",
         "Verify recipe_versions table exists (artisan test)",
@@ -49,7 +49,7 @@
       "id": 4,
       "description": "Database migrations create comments table with AI flag",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan migrate:fresh",
         "Verify comments table exists (artisan test)",
@@ -63,7 +63,7 @@
       "id": 5,
       "description": "Database migrations create chat_messages table",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan migrate:fresh",
         "Verify chat_messages table exists (artisan test)",
