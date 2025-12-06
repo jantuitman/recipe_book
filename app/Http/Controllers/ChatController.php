@@ -66,19 +66,43 @@ class ChatController extends Controller
                 ])
                 ->toArray();
 
-            // Get AI response
-            $aiResponse = $this->openAiService->chatResponse($userMessage, $recentMessages);
+            // Get AI response (with recipe detection)
+            $aiResponse = $this->openAiService->chatResponse($userMessage, $recentMessages, detectRecipe: true);
 
-            // Save AI response
-            $user->chatMessages()->create([
-                'role' => 'assistant',
-                'content' => $aiResponse
-            ]);
+            // Handle both string and array responses
+            if (is_array($aiResponse) && isset($aiResponse['has_recipe']) && $aiResponse['has_recipe'] === true) {
+                // Recipe detected in response
+                $messageContent = $aiResponse['message'];
+                $recipeData = $aiResponse['recipe'];
 
-            return response()->json([
-                'success' => true,
-                'response' => $aiResponse
-            ]);
+                // Save AI response with message only (not the JSON structure)
+                $user->chatMessages()->create([
+                    'role' => 'assistant',
+                    'content' => $messageContent
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'response' => $messageContent,
+                    'has_recipe' => true,
+                    'recipe' => $recipeData
+                ]);
+            } else {
+                // Normal response (string)
+                $messageContent = is_array($aiResponse) ? ($aiResponse['message'] ?? $aiResponse) : $aiResponse;
+
+                // Save AI response
+                $user->chatMessages()->create([
+                    'role' => 'assistant',
+                    'content' => $messageContent
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'response' => $messageContent,
+                    'has_recipe' => false
+                ]);
+            }
 
         } catch (\Exception $e) {
             Log::error('Chat error: ' . $e->getMessage());

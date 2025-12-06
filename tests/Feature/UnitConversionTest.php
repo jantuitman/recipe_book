@@ -32,7 +32,9 @@ class UnitConversionTest extends TestCase
         $response = $this->actingAs($user)->get(route('recipes.show', $recipe));
 
         $response->assertStatus(200);
-        $response->assertSee('data-controller="unit-conversion"', false);
+        // Unit conversion controller is present alongside serving-multiplier controller
+        $response->assertSee('unit-conversion', false);
+        $response->assertSee('data-controller=', false);
     }
 
     /** @test */

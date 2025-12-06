@@ -85,19 +85,21 @@ class OpenAiService
      *
      * @param string $userMessage The user's message
      * @param array $conversationHistory Previous messages in format [['role' => 'user', 'content' => '...'], ...]
-     * @return string AI response
+     * @param bool $detectRecipe Whether to detect and extract recipe data from response
+     * @return array|string Returns string for normal chat, array with 'message' and 'recipe' keys if recipe detected
      * @throws \Exception
      */
-    public function chatResponse(string $userMessage, array $conversationHistory = []): string
+    public function chatResponse(string $userMessage, array $conversationHistory = [], bool $detectRecipe = true)
     {
         $this->logger->info('Generating chat response', [
             'message_length' => strlen($userMessage),
-            'history_count' => count($conversationHistory)
+            'history_count' => count($conversationHistory),
+            'detect_recipe' => $detectRecipe
         ]);
 
         try {
             $messages = [
-                ['role' => 'system', 'content' => $this->getChatSystemPrompt()]
+                ['role' => 'system', 'content' => $this->getChatSystemPrompt($detectRecipe)]
             ];
 
             // Add conversation history (limit to last 10 messages for context window)
@@ -107,15 +109,50 @@ class OpenAiService
             // Add current user message
             $messages[] = ['role' => 'user', 'content' => $userMessage];
 
-            $response = $this->client->chat()->create([
+            $responseConfig = [
                 'model' => config('services.openai.model', 'gpt-4o-mini'),
                 'messages' => $messages,
                 'temperature' => 0.7,
-            ]);
+            ];
+
+            // If recipe detection is enabled, request JSON format
+            if ($detectRecipe) {
+                $responseConfig['response_format'] = ['type' => 'json_object'];
+            }
+
+            $response = $this->client->chat()->create($responseConfig);
 
             $content = $response->choices[0]->message->content;
             $this->logger->info('Chat response generated', ['response_length' => strlen($content)]);
 
+            // If recipe detection is enabled, parse the JSON response
+            if ($detectRecipe) {
+                $parsed = json_decode($content, true);
+
+                if (!$parsed || !isset($parsed['message'])) {
+                    // Fallback: if JSON parsing fails, return as string
+                    $this->logger->warning('Failed to parse chat JSON, returning as string');
+                    return $content;
+                }
+
+                // Check if a recipe was detected
+                if (isset($parsed['has_recipe']) && $parsed['has_recipe'] === true && isset($parsed['recipe'])) {
+                    $this->logger->info('Recipe detected in chat response', [
+                        'recipe_name' => $parsed['recipe']['name'] ?? 'unknown'
+                    ]);
+
+                    return [
+                        'message' => $parsed['message'],
+                        'has_recipe' => true,
+                        'recipe' => $parsed['recipe']
+                    ];
+                }
+
+                // No recipe detected, return just the message
+                return $parsed['message'];
+            }
+
+            // Recipe detection disabled, return raw content
             return $content;
 
         } catch (\Exception $e) {
@@ -213,8 +250,52 @@ PROMPT;
         return "Parse this recipe text and return the structured JSON:\n\n" . $text;
     }
 
-    private function getChatSystemPrompt(): string
+    private function getChatSystemPrompt(bool $detectRecipe = false): string
     {
+        if ($detectRecipe) {
+            return <<<'PROMPT'
+You are a friendly AI cooking assistant for the "AI Recipe Book" application.
+
+Your role:
+- Help users with cooking questions, recipe ideas, and culinary techniques
+- Suggest recipes based on ingredients or preferences
+- Provide cooking tips and substitution ideas
+- Answer questions about food preparation, storage, and safety
+
+IMPORTANT: You must ALWAYS respond in JSON format with this structure:
+{
+  "message": "Your conversational response to the user",
+  "has_recipe": false
+}
+
+When you suggest a COMPLETE recipe with ingredients and cooking steps, set "has_recipe" to true and include the recipe data:
+{
+  "message": "Here's a delicious pasta recipe for you! [Include your conversational intro here]",
+  "has_recipe": true,
+  "recipe": {
+    "name": "Recipe Name",
+    "servings": 4,
+    "ingredients": [
+      {"name": "ingredient name", "quantity": 250, "unit": "g"},
+      {"name": "ingredient name", "quantity": 500, "unit": "ml"}
+    ],
+    "steps": [
+      {"step_number": 1, "instruction": "First step description"},
+      {"step_number": 2, "instruction": "Second step description"}
+    ]
+  }
+}
+
+Recipe data requirements:
+- Use METRIC units only: ml, L, g, kg, min
+- Convert: 1 cup=237ml, 1 tbsp=15ml, 1 tsp=5ml, 1 oz=28g, 1 lb=454g
+- Default servings to 4 if not specified
+- Only include recipe data for COMPLETE recipes (not ingredient lists or cooking tips alone)
+
+Stay focused on cooking and food-related topics.
+PROMPT;
+        }
+
         return <<<'PROMPT'
 You are a friendly AI cooking assistant for the "AI Recipe Book" application.
 

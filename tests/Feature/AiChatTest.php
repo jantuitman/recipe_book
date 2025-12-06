@@ -113,11 +113,11 @@ class AiChatTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // Mock OpenAI service response
+        // Mock OpenAI service response (now returns string)
         $this->mockOpenAiService
             ->shouldReceive('chatResponse')
             ->once()
-            ->with('How do I make pasta?', Mockery::any())
+            ->with('How do I make pasta?', Mockery::any(), Mockery::any())
             ->andReturn('Here is how to make pasta...');
 
         $response = $this->actingAs($user)->postJson('/chat', [
@@ -127,7 +127,8 @@ class AiChatTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'success' => true,
-            'response' => 'Here is how to make pasta...'
+            'response' => 'Here is how to make pasta...',
+            'has_recipe' => false
         ]);
 
         // Verify both messages were saved
@@ -197,7 +198,7 @@ class AiChatTest extends TestCase
                 return count($history) >= 2
                     && $history[0]['content'] === 'What is the best way to cook steak?'
                     && $history[1]['content'] === 'The best way to cook steak is...';
-            }))
+            }), Mockery::any())
             ->andReturn('Sure, I can elaborate on that...');
 
         // Send follow-up message
@@ -217,7 +218,7 @@ class AiChatTest extends TestCase
         $this->mockOpenAiService
             ->shouldReceive('chatResponse')
             ->once()
-            ->with('Test message', Mockery::any())
+            ->with('Test message', Mockery::any(), Mockery::any())
             ->andThrow(new \Exception('API error'));
 
         $response = $this->actingAs($user)->postJson('/chat', [
