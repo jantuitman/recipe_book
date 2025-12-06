@@ -569,7 +569,7 @@
       "id": 40,
       "description": "Ingredient editor validates quantity is numeric",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview",
         "Enter non-numeric text in quantity field",

@@ -356,24 +356,67 @@ Instructions:
 
         function createIngredientRow(ingredient, index) {
             const div = document.createElement('div');
-            div.className = 'flex gap-2 items-center';
+            div.className = 'flex flex-col gap-1';
             div.innerHTML = `
-                <input type="number" step="0.01" value="${ingredient.quantity || ''}"
-                    class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
-                    placeholder="Qty" data-field="quantity">
-                <input type="text" value="${ingredient.unit || ''}"
-                    class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
-                    placeholder="Unit" data-field="unit" list="units">
-                <input type="text" value="${ingredient.name || ''}"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
-                    placeholder="Ingredient name" data-field="name">
-                <button type="button" class="text-red-600 hover:text-red-800 p-2" onclick="this.parentElement.remove()">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                </button>
+                <div class="flex gap-2 items-center">
+                    <div class="w-24">
+                        <input type="number" step="0.01" value="${ingredient.quantity || ''}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
+                            placeholder="Qty" data-field="quantity">
+                    </div>
+                    <input type="text" value="${ingredient.unit || ''}"
+                        class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
+                        placeholder="Unit" data-field="unit" list="units">
+                    <input type="text" value="${ingredient.name || ''}"
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E07A5F]"
+                        placeholder="Ingredient name" data-field="name">
+                    <button type="button" class="text-red-600 hover:text-red-800 p-2" onclick="this.parentElement.parentElement.remove()">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="error-message text-red-600 text-sm ml-1 hidden" data-error="quantity"></div>
             `;
+
+            // Add validation listener
+            const quantityInput = div.querySelector('[data-field="quantity"]');
+            const errorDiv = div.querySelector('[data-error="quantity"]');
+
+            quantityInput.addEventListener('input', function() {
+                validateQuantityField(this, errorDiv);
+            });
+
+            quantityInput.addEventListener('blur', function() {
+                validateQuantityField(this, errorDiv);
+            });
+
             return div;
+        }
+
+        function validateQuantityField(input, errorDiv) {
+            const value = input.value.trim();
+
+            // Allow empty (user might be typing)
+            if (value === '') {
+                errorDiv.classList.add('hidden');
+                input.classList.remove('border-red-500');
+                return true;
+            }
+
+            // Check if numeric
+            const numValue = parseFloat(value);
+            if (isNaN(numValue) || numValue <= 0) {
+                errorDiv.textContent = 'Quantity must be a positive number';
+                errorDiv.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                return false;
+            }
+
+            // Valid
+            errorDiv.classList.add('hidden');
+            input.classList.remove('border-red-500');
+            return true;
         }
 
         function renderSteps(steps) {
