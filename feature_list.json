@@ -1200,7 +1200,7 @@
       "id": 83,
       "description": "Recipe detail page shows serving size control",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with servings=4 (artisan test)",
         "Navigate to recipe detail page",
@@ -1215,7 +1215,7 @@
       "id": 84,
       "description": "Serving size modifier scales ingredient quantities",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe for 4 servings with 200g flour",
         "Change servings to 6",
@@ -1229,7 +1229,7 @@
       "id": 85,
       "description": "Serving size modifier works with unit conversion",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with weight_unit='oz' (artisan test)",
         "Navigate to recipe for 4 servings with 200g flour",
@@ -1243,7 +1243,7 @@
       "id": 86,
       "description": "Serving size modifier has minimum of 1",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Click minus button until servings is 1",
@@ -1256,7 +1256,7 @@
       "id": 87,
       "description": "Serving size modifier has reset button",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe for 4 servings",
         "Change servings to 8",
@@ -1270,7 +1270,7 @@
       "id": 88,
       "description": "Serving size persists in sessionStorage",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Change servings to 6",

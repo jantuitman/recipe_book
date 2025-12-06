@@ -71,4 +71,29 @@ export default class extends Controller {
         this.timeFormatValue = timeFormat;
         this.convertAllIngredients();
     }
+
+    /**
+     * Convert and format a quantity with unit
+     * Used by serving-multiplier controller to scale quantities
+     *
+     * @param {number} quantity - The quantity to convert (already in metric)
+     * @param {string} unit - The metric unit (ml, g, min, etc.)
+     * @returns {string} - Formatted string like "250 ml" or "1 cup"
+     */
+    convertAndFormat(quantity, unit) {
+        const unitType = detectUnitType(unit);
+
+        let converted;
+
+        if (unitType === 'volume' && this.volumeUnitValue) {
+            converted = convertVolume(quantity, this.volumeUnitValue);
+        } else if (unitType === 'weight' && this.weightUnitValue) {
+            converted = convertWeight(quantity, this.weightUnitValue);
+        } else {
+            // No conversion needed
+            converted = { value: quantity, unit: unit };
+        }
+
+        return formatQuantity(converted.value, converted.unit);
+    }
 }

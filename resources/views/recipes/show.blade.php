@@ -46,22 +46,49 @@
                     </div>
 
                     @if($latestVersion)
-                        <!-- Servings -->
-                        <div class="mb-6">
-                            <p class="text-gray-700"><strong>Servings:</strong> {{ $latestVersion->servings }}</p>
-                        </div>
-
-                        <!-- Ingredients -->
+                        <!-- Servings Control -->
                         <div class="mb-6"
-                             data-controller="unit-conversion"
+                             data-controller="serving-multiplier unit-conversion"
+                             data-serving-multiplier-base-servings-value="{{ $latestVersion->servings }}"
                              data-unit-conversion-volume-unit-value="{{ auth()->user()->volume_unit ?? 'ml' }}"
                              data-unit-conversion-weight-unit-value="{{ auth()->user()->weight_unit ?? 'g' }}"
                              data-unit-conversion-time-format-value="{{ auth()->user()->time_format ?? 'min' }}">
+                            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-700">Servings:</span>
+                                <div class="flex items-center gap-2">
+                                    <button type="button"
+                                            data-action="click->serving-multiplier#decrease"
+                                            data-serving-multiplier-target="minusButton"
+                                            class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md font-bold text-gray-700 transition">
+                                        -
+                                    </button>
+                                    <input type="number"
+                                           data-serving-multiplier-target="servingInput"
+                                           data-action="input->serving-multiplier#change"
+                                           value="{{ $latestVersion->servings }}"
+                                           min="1"
+                                           class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#E07A5F] focus:ring focus:ring-[#E07A5F] focus:ring-opacity-50">
+                                    <button type="button"
+                                            data-action="click->serving-multiplier#increase"
+                                            class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md font-bold text-gray-700 transition">
+                                        +
+                                    </button>
+                                </div>
+                                <button type="button"
+                                        data-action="click->serving-multiplier#reset"
+                                        class="px-3 py-1 bg-[#81B29A] hover:bg-[#6fa088] text-white rounded-md text-sm font-semibold transition">
+                                    Reset
+                                </button>
+                            </div>
+
+                        <!-- Ingredients -->
+                        <div class="mb-6 mt-6">
                             <h2 class="text-xl font-semibold mb-3">Ingredients</h2>
                             <ul class="list-disc list-inside space-y-1">
                                 @foreach($latestVersion->ingredients as $ingredient)
                                     <li class="text-gray-700">
                                         <span data-unit-conversion-target="ingredient"
+                                              data-serving-multiplier-target="ingredient"
                                               data-base-quantity="{{ $ingredient['quantity'] }}"
                                               data-base-unit="{{ $ingredient['unit'] }}">
                                             {{ $ingredient['quantity'] }} {{ $ingredient['unit'] }}
@@ -84,6 +111,7 @@
                                 @endforeach
                             </ol>
                         </div>
+                        </div><!-- End serving-multiplier controller wrapper -->
                     @else
                         <p class="text-gray-600 italic">No version data available for this recipe.</p>
                     @endif
