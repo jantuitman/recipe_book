@@ -748,7 +748,7 @@
       "id": 52,
       "description": "Recipe edit creates new version",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe at version 1 (artisan test)",
         "Navigate to recipe edit page",
