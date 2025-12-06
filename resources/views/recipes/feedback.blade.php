@@ -186,16 +186,88 @@
         }
 
         function showSuggestions(suggestions) {
-            // This will be implemented in the next step
-            // For now, just show a message
             const suggestionDiv = document.createElement('div');
-            suggestionDiv.className = 'bg-blue-50 border border-blue-200 rounded-lg p-4';
+            suggestionDiv.className = 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-indigo-300 rounded-lg p-6 mt-4';
+
+            let ingredientsHtml = '<ul class="list-disc ml-5 space-y-1">';
+            suggestions.ingredients.forEach(ing => {
+                ingredientsHtml += `<li>${ing.quantity} ${ing.unit} ${ing.name}</li>`;
+            });
+            ingredientsHtml += '</ul>';
+
+            let stepsHtml = '<ol class="list-decimal ml-5 space-y-2">';
+            suggestions.steps.forEach(step => {
+                stepsHtml += `<li>${step.instruction}</li>`;
+            });
+            stepsHtml += '</ol>';
+
             suggestionDiv.innerHTML = `
-                <p class="font-semibold text-blue-900 mb-2">📝 AI Suggestions Available</p>
-                <p class="text-sm text-blue-700">The AI has proposed changes to your recipe. Review and apply them if you'd like.</p>
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="text-3xl">✨</div>
+                    <div>
+                        <p class="font-bold text-lg text-indigo-900">AI Recipe Improvements Ready</p>
+                        <p class="text-sm text-indigo-700 mt-1">${suggestions.change_summary}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-white rounded-lg p-4">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Updated Ingredients:</h4>
+                        ${ingredientsHtml}
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Updated Steps:</h4>
+                        ${stepsHtml}
+                    </div>
+                </div>
+
+                <div class="flex gap-3 justify-end">
+                    <button onclick="applySuggestions()" class="px-6 py-3 bg-[#E07A5F] text-white rounded-md font-semibold hover:bg-[#d16850] focus:outline-none focus:ring-2 focus:ring-[#E07A5F] focus:ring-offset-2 transition shadow-md">
+                        ✓ Apply These Changes
+                    </button>
+                    <button onclick="cancelSuggestions()" class="px-6 py-3 bg-gray-300 text-gray-700 rounded-md font-semibold hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition">
+                        Cancel
+                    </button>
+                </div>
             `;
             feedbackMessages.appendChild(suggestionDiv);
             scrollToBottom();
+        }
+
+        async function applySuggestions() {
+            if (!confirm('Apply these AI-suggested changes to your recipe? This will create a new version.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/recipes/${recipeId}/apply-suggestions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error applying suggestions:', error);
+                alert('Failed to apply suggestions. Please try again.');
+            }
+        }
+
+        function cancelSuggestions() {
+            if (confirm('Discard these suggestions?')) {
+                // Just remove the suggestions UI
+                const suggestionDivs = document.querySelectorAll('.bg-gradient-to-br');
+                suggestionDivs.forEach(div => div.remove());
+            }
         }
 
         function scrollToBottom() {

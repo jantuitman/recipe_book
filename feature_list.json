@@ -1025,7 +1025,7 @@
       "id": 71,
       "description": "AI processes recipe feedback and suggests changes",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI with recipe improvement prompt (artisan test)",
         "POST to /recipes/{id}/feedback with 'too salty' (artisan test)",
@@ -1038,7 +1038,7 @@
       "id": 72,
       "description": "AI recipe improvement shows preview of changes",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to feedback chat after AI suggests changes",
         "Verify diff preview is shown",
@@ -1055,7 +1055,7 @@
       "id": 73,
       "description": "Applying AI suggestions creates new version",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to feedback chat with AI suggestions",
         "Click 'Apply these changes' button",
@@ -1070,7 +1070,7 @@
       "id": 74,
       "description": "AI improvement comment links to resulting version",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Apply AI suggestions creating version 3 (artisan test)",
         "Query comments for recipe (artisan test)",

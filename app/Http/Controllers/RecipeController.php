@@ -206,4 +206,107 @@ class RecipeController extends Controller
 
         return view('recipes.feedback', compact('recipe', 'latestVersion'));
     }
+
+    /**
+     * Process feedback and get AI suggestions for recipe improvement.
+     */
+    public function processFeedback(Request $request, Recipe $recipe)
+    {
+        $this->authorize('view', $recipe);
+
+        $validated = $request->validate([
+            'feedback' => 'required|string|min:3|max:1000',
+            'recipe' => 'required|array',
+            'recipe.ingredients' => 'required|array',
+            'recipe.steps' => 'required|array',
+        ]);
+
+        try {
+            $openAiService = app(\App\Services\OpenAiService::class);
+
+            // Get AI suggestions for improvement
+            $suggestions = $openAiService->improveRecipe(
+                $validated['recipe'],
+                $validated['feedback']
+            );
+
+            // Store suggestions in session for later application
+            session()->put('recipe_suggestions_' . $recipe->id, [
+                'suggestions' => $suggestions,
+                'feedback' => $validated['feedback'],
+                'timestamp' => now()->toIso8601String()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "I've analyzed your feedback and prepared some improvements. Here's what I suggest:\n\n" .
+                            $suggestions['change_summary'],
+                'suggestions' => $suggestions
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Recipe feedback processing failed', [
+                'recipe_id' => $recipe->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, I encountered an error processing your feedback. Please try again.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Apply AI suggestions and create a new recipe version.
+     */
+    public function applySuggestions(Request $request, Recipe $recipe)
+    {
+        $this->authorize('update', $recipe);
+
+        // Retrieve suggestions from session
+        $sessionKey = 'recipe_suggestions_' . $recipe->id;
+        $sessionData = session()->get($sessionKey);
+
+        if (!$sessionData || !isset($sessionData['suggestions'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No suggestions found. Please provide feedback first.'
+            ], 400);
+        }
+
+        $suggestions = $sessionData['suggestions'];
+        $feedback = $sessionData['feedback'];
+
+        // Get the current latest version number
+        $latestVersion = $recipe->versions()->orderBy('version_number', 'desc')->first();
+        $newVersionNumber = $latestVersion ? $latestVersion->version_number + 1 : 1;
+
+        // Create new version with AI suggestions
+        $newVersion = $recipe->versions()->create([
+            'version_number' => $newVersionNumber,
+            'servings' => $suggestions['servings'] ?? $latestVersion->servings ?? 4,
+            'ingredients' => $suggestions['ingredients'],
+            'steps' => $suggestions['steps'],
+            'change_summary' => $suggestions['change_summary'] ?? 'AI-suggested improvements based on user feedback'
+        ]);
+
+        // Create AI comment linking to this version
+        $newVersion->comments()->create([
+            'user_id' => null, // AI comment
+            'content' => "Based on your feedback: \"{$feedback}\"\n\n" . $suggestions['change_summary'],
+            'is_ai' => true,
+            'result_version_id' => $newVersion->id
+        ]);
+
+        // Clear the session data
+        session()->forget($sessionKey);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Recipe updated successfully with AI suggestions!',
+            'version_number' => $newVersionNumber,
+            'redirect_url' => route('recipes.show', $recipe)
+        ]);
+    }
 }

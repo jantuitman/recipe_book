@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
 
     // Recipe feedback routes
     Route::get('/recipes/{recipe}/feedback', [RecipeController::class, 'feedback'])->name('recipes.feedback');
+    Route::post('/recipes/{recipe}/feedback', [RecipeController::class, 'processFeedback'])->name('recipes.feedback.process');
+    Route::post('/recipes/{recipe}/apply-suggestions', [RecipeController::class, 'applySuggestions'])->name('recipes.apply-suggestions');
 
     // Comment routes
     Route::post('/recipes/{recipe}/versions/{version}/comments', [CommentController::class, 'store'])->name('comments.store');
