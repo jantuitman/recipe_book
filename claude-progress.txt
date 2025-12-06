@@ -1324,3 +1324,107 @@ NOTES:
 SESSION END TIME: 2025-12-06
 TOKEN USAGE: ~83k / 200k tokens used
 
+
+===========================================
+AI RECIPE BOOK - CODING SESSION 14
+===========================================
+Date: 2025-12-06
+Agent: Coding Agent
+Status: IN PROGRESS
+
+ACCOMPLISHED TASKS:
+===================
+
+1. ✅ Fixed failing test (UnitConversionTest)
+   - Updated test to check for "unit-conversion" string presence
+   - All 158 tests passing after fix
+
+2. ✅ Implemented AI chat recipe detection (Feature 67)
+   - Modified OpenAiService.chatResponse() to support recipe detection
+   - Added detectRecipe parameter (default true)
+   - Updated system prompt to instruct AI to return JSON with recipe data
+   - Returns array with 'message', 'has_recipe', and 'recipe' keys when detected
+   - Returns string for normal chat responses
+   - Recipe data includes: name, servings, ingredients[], steps[]
+   - All measurements in metric units (ml, g, min)
+
+3. ✅ Updated ChatController to handle recipe detection
+   - Modified sendMessage() to process recipe detection responses
+   - Saves only message content to database (not JSON structure)
+   - Returns has_recipe flag and recipe data in API response
+   - Maintains backward compatibility with existing chat functionality
+
+4. ✅ Created comprehensive test suite (RecipeDetectionTest)
+   - 5 tests covering all recipe detection scenarios:
+     * Recipe detection in AI response
+     * Normal chat without recipe
+     * Recipe data structure validation
+     * Metric units verification
+     * Message storage (excludes JSON structure)
+   - All tests passing with mocked OpenAI service
+
+5. ✅ Updated existing AiChatTest
+   - Fixed 3 failing tests to account for new detectRecipe parameter
+   - Updated mock expectations to include third parameter
+   - All chat tests still passing
+
+CURRENT FEATURE STATUS:
+=======================
+- Total features: 100
+- Passing: 81 (up from 80)
+- Pending: 19
+
+Feature marked passing this session:
+- Feature 67: AI chat detects when recipe is suggested
+
+TEST RESULTS:
+=============
+All tests passing:
+- Total: 163 tests, 517 assertions (up from 158 tests)
+- Added RecipeDetectionTest: 5 new tests
+- No regressions introduced
+
+NEXT PRIORITY TASKS:
+====================
+
+Current task: Implementing Features 68-69 (Recipe saving from chat)
+- Feature 68: Save recipe button appears when AI suggests recipe
+- Feature 69: Saving recipe from chat creates recipe record
+
+Remaining features (19 pending):
+- Features 68-74: Recipe saving and feedback workflow (6 features)
+- Features 89-93: OpenAI service improvements (5 features)
+- Features 94-100: Styling and polish (7 features)
+
+FILES CREATED/MODIFIED:
+=======================
+- app/Services/OpenAiService.php (MODIFIED)
+  * Added recipe detection to chatResponse() method
+  * Updated getChatSystemPrompt() to support JSON response format
+  * Returns array with recipe data when detected
+- app/Http/Controllers/ChatController.php (MODIFIED)
+  * Updated sendMessage() to handle recipe detection
+  * Saves message content only, returns recipe data in response
+- tests/Feature/RecipeDetectionTest.php (NEW)
+  * 5 comprehensive tests for recipe detection
+- tests/Feature/AiChatTest.php (MODIFIED)
+  * Updated mocks to include new detectRecipe parameter
+- tests/Feature/UnitConversionTest.php (MODIFIED)
+  * Fixed assertion to check for "unit-conversion" string
+- feature_list.json (UPDATED - Feature 67 marked passing)
+
+GIT COMMIT:
+===========
+Commit: d07a6eb
+Message: "Implement AI chat recipe detection - feature 67 passing"
+
+NOTES:
+======
+- Recipe detection is now fully functional with comprehensive tests
+- Backend ready for frontend "Save Recipe" button implementation
+- Chat responses now include has_recipe flag for UI conditional rendering
+- All existing chat functionality remains intact
+- No regressions - all 163 tests passing
+- 81% of features complete (81/100)
+
+SESSION CONTINUES...

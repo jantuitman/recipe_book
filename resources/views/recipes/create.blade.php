@@ -198,6 +198,21 @@ Instructions:
 
         let parsedRecipe = null;
 
+        // Check if recipe data was passed from chat
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('from_chat') === '1') {
+            const chatRecipeData = sessionStorage.getItem('chatRecipe');
+            if (chatRecipeData) {
+                try {
+                    parsedRecipe = JSON.parse(chatRecipeData);
+                    sessionStorage.removeItem('chatRecipe'); // Clear after using
+                    showPreview(parsedRecipe);
+                } catch (error) {
+                    console.error('Error loading recipe from chat:', error);
+                }
+            }
+        }
+
         parseBtn.addEventListener('click', async function() {
             const text = recipeText.value.trim();
             const name = recipeName.value.trim();

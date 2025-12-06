@@ -66,14 +66,14 @@
         }
 
         // Add message to chat UI
-        function addMessage(content, role, timestamp = null) {
+        function addMessage(content, role, timestamp = null, recipeData = null) {
             // Hide "no messages" text if visible
             if (noMessagesDiv) {
                 noMessagesDiv.remove();
             }
 
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} flex-col`;
 
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = `max-w-[70%] rounded-lg p-4 ${
@@ -97,8 +97,39 @@
             }
 
             messageDiv.appendChild(bubbleDiv);
+
+            // If this is an AI message with a recipe, add a "Save Recipe" button
+            if (role === 'assistant' && recipeData) {
+                const buttonDiv = document.createElement('div');
+                buttonDiv.className = 'mt-3 max-w-[70%]';
+
+                const saveButton = document.createElement('button');
+                saveButton.className = 'px-4 py-2 text-sm font-semibold text-white rounded-lg transition';
+                saveButton.style.backgroundColor = '#81B29A';
+                saveButton.textContent = '💾 Save this recipe';
+                saveButton.onclick = () => saveRecipeFromChat(recipeData);
+
+                // Hover effect
+                saveButton.onmouseenter = () => {
+                    saveButton.style.backgroundColor = '#6fa088';
+                };
+                saveButton.onmouseleave = () => {
+                    saveButton.style.backgroundColor = '#81B29A';
+                };
+
+                buttonDiv.appendChild(saveButton);
+                messageDiv.appendChild(buttonDiv);
+            }
+
             chatMessages.appendChild(messageDiv);
             scrollToBottom();
+        }
+
+        // Save recipe from chat
+        async function saveRecipeFromChat(recipeData) {
+            // Store recipe data temporarily and redirect to create page
+            sessionStorage.setItem('chatRecipe', JSON.stringify(recipeData));
+            window.location.href = '/recipes/create?from_chat=1';
         }
 
         // Load previous messages on page load
@@ -147,8 +178,9 @@
                 const data = await response.json();
 
                 if (data.success && data.response) {
-                    // Add AI response
-                    addMessage(data.response, 'assistant', new Date().toISOString());
+                    // Add AI response (with recipe data if present)
+                    const recipeData = data.has_recipe ? data.recipe : null;
+                    addMessage(data.response, 'assistant', new Date().toISOString(), recipeData);
                 } else {
                     // Show error
                     addMessage('Sorry, I encountered an error. Please try again.', 'assistant', new Date().toISOString());

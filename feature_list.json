@@ -970,7 +970,7 @@
       "id": 67,
       "description": "AI chat detects when recipe is suggested",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to return recipe suggestion (artisan test)",
         "Send message asking for recipe (artisan test)",
