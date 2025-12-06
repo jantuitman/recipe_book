@@ -4,6 +4,8 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     server: {
         host: '0.0.0.0',
+        origin: 'http://localhost:5173',
+        cors: true,
     },
     plugins: [
         laravel({

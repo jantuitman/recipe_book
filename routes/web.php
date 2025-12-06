@@ -17,6 +17,10 @@ Route::middleware('auth')->group(function () {
     // Recipe routes
     Route::resource('recipes', RecipeController::class);
 
+    // Recipe version routes
+    Route::get('/recipes/{recipe}/history', [RecipeController::class, 'history'])->name('recipes.history');
+    Route::get('/recipes/{recipe}/versions/{version}', [RecipeController::class, 'showVersion'])->name('recipes.versions.show');
+
     // Chat route
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
 

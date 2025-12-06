@@ -5,6 +5,10 @@
                 {{ $recipe->name }}
             </h2>
             <div class="flex gap-2">
+                <a href="{{ route('recipes.history', $recipe) }}"
+                   class="inline-flex items-center px-4 py-2 bg-[#81B29A] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-[#6fa088] focus:bg-[#6fa088] active:bg-[#5d8876] focus:outline-none focus:ring-2 focus:ring-[#81B29A] focus:ring-offset-2 transition ease-in-out duration-150">
+                    View History
+                </a>
                 <a href="{{ route('recipes.edit', $recipe) }}"
                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Edit

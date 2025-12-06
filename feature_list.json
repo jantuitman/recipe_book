@@ -764,7 +764,7 @@
       "id": 53,
       "description": "Recipe version history lists all versions",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 4 versions (artisan test)",
         "Navigate to recipe detail page",
@@ -779,7 +779,7 @@
       "id": 54,
       "description": "Recipe version history shows change summaries",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with versions (artisan test)",
         "Navigate to version history page",
@@ -792,7 +792,7 @@
       "id": 55,
       "description": "Specific recipe version can be viewed",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 3 versions (artisan test)",
         "Navigate to version history page",

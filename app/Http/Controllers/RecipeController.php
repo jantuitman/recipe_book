@@ -147,4 +147,33 @@ class RecipeController extends Controller
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe deleted successfully!');
     }
+
+    /**
+     * Show version history for a recipe.
+     */
+    public function history(Recipe $recipe)
+    {
+        $this->authorize('view', $recipe);
+
+        $recipe->load('versions');
+        $versions = $recipe->versions->sortByDesc('version_number');
+        $latestVersion = $versions->first();
+
+        return view('recipes.history', compact('recipe', 'versions', 'latestVersion'));
+    }
+
+    /**
+     * Show a specific version of a recipe.
+     */
+    public function showVersion(Recipe $recipe, RecipeVersion $version)
+    {
+        $this->authorize('view', $recipe);
+
+        // Ensure the version belongs to this recipe
+        if ($version->recipe_id !== $recipe->id) {
+            abort(404);
+        }
+
+        return view('recipes.show-version', compact('recipe', 'version'));
+    }
 }
