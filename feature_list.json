@@ -374,7 +374,7 @@
       "id": 27,
       "description": "Navigation bar shows correct items when logged in",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to any page",
@@ -392,7 +392,7 @@
       "id": 28,
       "description": "Navigation bar shows correct items when logged out",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/ without authentication",
         "Verify 'Login' link is visible",
@@ -405,7 +405,7 @@
       "id": 29,
       "description": "Navigation bar is mobile responsive",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/",
         "Resize browser to 375px width",

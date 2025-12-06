@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,9 @@ Route::middleware('auth')->group(function () {
 
     // Recipe routes
     Route::resource('recipes', RecipeController::class);
+
+    // Chat route
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
