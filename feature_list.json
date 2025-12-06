@@ -420,7 +420,7 @@
       "id": 30,
       "description": "Home page displays for unauthenticated users",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/",
         "Verify hero section is displayed",
@@ -435,7 +435,7 @@
       "id": 31,
       "description": "New recipe form displays text input interface",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to http://localhost:8000/recipes/create",
@@ -523,7 +523,7 @@
       "id": 37,
       "description": "Recipe preview shows structured data after parsing",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /recipes/create",
@@ -541,7 +541,7 @@
       "id": 38,
       "description": "Ingredient editor allows adding new rows",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview after parsing",
         "Click 'Add Ingredient' button",
@@ -613,7 +613,7 @@
       "id": 43,
       "description": "Steps editor allows adding new steps",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview after parsing",
         "Click 'Add Step' button",
