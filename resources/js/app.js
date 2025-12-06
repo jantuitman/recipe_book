@@ -1,13 +1,14 @@
 import './bootstrap';
+
+import Alpine from 'alpinejs';
 import { Application } from "@hotwired/stimulus"
+import UnitConversionController from "./controllers/unit_conversion_controller"
+import ServingMultiplierController from "./controllers/serving_multiplier_controller"
 
-// Start Stimulus application
+window.Alpine = Alpine;
+Alpine.start();
+
+// Initialize Stimulus
 const application = Application.start()
-
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus = application
-
-// Import controllers as needed
-// import HelloController from "./controllers/hello_controller"
-// application.register("hello", HelloController)
+application.register("unit-conversion", UnitConversionController)
+application.register("serving-multiplier", ServingMultiplierController)

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 
 class Comment extends Model
 {
+    use HasFactory;
     /**
      * Indicates if the model should be timestamped.
      * Comment only has created_at, no updated_at.
@@ -26,6 +28,7 @@ class Comment extends Model
         'user_id',
         'content',
         'is_ai',
+        'has_feedback',
         'result_version_id',
     ];
 
@@ -38,6 +41,7 @@ class Comment extends Model
     {
         return [
             'is_ai' => 'boolean',
+            'has_feedback' => 'boolean',
             'created_at' => 'datetime',
         ];
     }

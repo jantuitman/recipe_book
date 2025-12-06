@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 
 class ChatMessage extends Model
 {
+    use HasFactory;
     /**
      * Indicates if the model should be timestamped.
      * ChatMessage only has created_at, no updated_at.

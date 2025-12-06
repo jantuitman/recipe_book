@@ -77,7 +77,7 @@
       "id": 6,
       "description": "User model has relationships to recipes, comments, and chat messages",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify User model has recipes() hasMany relationship (artisan test)",
         "Verify User model has comments() hasMany relationship (artisan test)",
@@ -89,7 +89,7 @@
       "id": 7,
       "description": "Recipe model has relationships to user, versions, and comments",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify Recipe model has user() belongsTo relationship (artisan test)",
         "Verify Recipe model has versions() hasMany relationship (artisan test)",
@@ -101,7 +101,7 @@
       "id": 8,
       "description": "RecipeVersion model has relationships and JSON casting",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify RecipeVersion model has recipe() belongsTo relationship (artisan test)",
         "Verify RecipeVersion model has comments() hasMany relationship (artisan test)",
@@ -114,7 +114,7 @@
       "id": 9,
       "description": "Comment model has relationships including result version link",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify Comment model has recipeVersion() belongsTo relationship (artisan test)",
         "Verify Comment model has user() belongsTo relationship (artisan test)",
@@ -126,7 +126,7 @@
       "id": 10,
       "description": "ChatMessage model has relationships and role validation",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify ChatMessage model has user() belongsTo relationship (artisan test)",
         "Verify ChatMessage model has recipe() belongsTo relationship (artisan test)",
@@ -138,7 +138,7 @@
       "id": 11,
       "description": "User registration creates account and logs in automatically",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Run: php artisan serve --host=0.0.0.0",
         "Navigate to http://localhost:8000/register",
@@ -153,7 +153,7 @@
       "id": 12,
       "description": "User registration validates required fields",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Submit registration with empty name (artisan test)",
         "Verify validation error for name field (artisan test)",
@@ -169,7 +169,7 @@
       "id": 13,
       "description": "User registration prevents duplicate emails",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with email test@example.com (artisan test)",
         "Attempt to register another user with same email (artisan test)",
@@ -181,7 +181,7 @@
       "id": 14,
       "description": "User login authenticates with valid credentials",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create test user in database (artisan test)",
         "Navigate to http://localhost:8000/login",
@@ -195,7 +195,7 @@
       "id": 15,
       "description": "User login rejects invalid credentials",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/login",
         "Fill in email with wrong password",
@@ -209,7 +209,7 @@
       "id": 16,
       "description": "User login remembers user when checkbox selected",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/login",
         "Fill in email and password",
@@ -224,7 +224,7 @@
       "id": 17,
       "description": "User logout clears session and redirects to home",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to dashboard",
@@ -239,7 +239,7 @@
       "id": 18,
       "description": "Protected routes require authentication",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Attempt to access /dashboard without authentication (artisan test)",
         "Verify redirect to login page (artisan test)",
@@ -255,7 +255,7 @@
       "id": 19,
       "description": "Users can only see their own recipes",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create two users with recipes (artisan test)",
         "Login as user 1 (artisan test)",
@@ -269,7 +269,7 @@
       "id": 20,
       "description": "Recipe dashboard displays user's recipe collection",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with 5 recipes (artisan test)",
         "Navigate to http://localhost:8000/dashboard",
@@ -285,7 +285,7 @@
       "id": 21,
       "description": "Recipe dashboard shows empty state when no recipes",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as new user with no recipes (artisan test)",
         "Navigate to http://localhost:8000/dashboard",
@@ -299,7 +299,7 @@
       "id": 22,
       "description": "Recipe cards display with proper styling",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -315,7 +315,7 @@
       "id": 23,
       "description": "Recipe search filters by name in real-time",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes 'Pasta', 'Pizza', 'Salad' (artisan test)",
         "Navigate to dashboard",
@@ -331,7 +331,7 @@
       "id": 24,
       "description": "Recipe search filters by ingredient",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes containing different ingredients (artisan test)",
         "Navigate to dashboard",
@@ -345,7 +345,7 @@
       "id": 25,
       "description": "Recipe search shows 'no results' message",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -359,7 +359,7 @@
       "id": 26,
       "description": "Recipe search uses StimulusJS without page reload",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -374,7 +374,7 @@
       "id": 27,
       "description": "Navigation bar shows correct items when logged in",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to any page",
@@ -392,7 +392,7 @@
       "id": 28,
       "description": "Navigation bar shows correct items when logged out",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/ without authentication",
         "Verify 'Login' link is visible",
@@ -405,7 +405,7 @@
       "id": 29,
       "description": "Navigation bar is mobile responsive",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/",
         "Resize browser to 375px width",
@@ -420,7 +420,7 @@
       "id": 30,
       "description": "Home page displays for unauthenticated users",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/",
         "Verify hero section is displayed",
@@ -435,7 +435,7 @@
       "id": 31,
       "description": "New recipe form displays text input interface",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to http://localhost:8000/recipes/create",
@@ -450,7 +450,7 @@
       "id": 32,
       "description": "AI recipe parser endpoint receives text and returns structured data",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create test with mocked OpenAI client (artisan test)",
         "Send POST to /ai/parse-recipe with recipe text (artisan test)",
@@ -465,7 +465,7 @@
       "id": 33,
       "description": "AI recipe parser converts units to metric",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to parse '2 cups flour, 4 oz butter' (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -478,7 +478,7 @@
       "id": 34,
       "description": "AI recipe parser extracts serving count",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to parse recipe with 'Serves 6' (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -491,7 +491,7 @@
       "id": 35,
       "description": "AI recipe parser handles API errors gracefully",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to throw timeout error (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -506,7 +506,7 @@
       "id": 36,
       "description": "Recipe parsing shows loading spinner",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /recipes/create",
@@ -523,7 +523,7 @@
       "id": 37,
       "description": "Recipe preview shows structured data after parsing",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /recipes/create",
@@ -541,7 +541,7 @@
       "id": 38,
       "description": "Ingredient editor allows adding new rows",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview after parsing",
         "Click 'Add Ingredient' button",
@@ -556,7 +556,7 @@
       "id": 39,
       "description": "Ingredient editor allows deleting rows",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview with 3 ingredients",
         "Click delete button on second ingredient",
@@ -569,7 +569,7 @@
       "id": 40,
       "description": "Ingredient editor validates quantity is numeric",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview",
         "Enter non-numeric text in quantity field",
@@ -583,7 +583,7 @@
       "id": 41,
       "description": "Ingredient editor suggests common units",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview",
         "Click on unit field",
@@ -597,7 +597,7 @@
       "id": 42,
       "description": "Ingredient editor inline editing works",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview with parsed ingredients",
         "Click on ingredient name",
@@ -613,7 +613,7 @@
       "id": 43,
       "description": "Steps editor allows adding new steps",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview after parsing",
         "Click 'Add Step' button",
@@ -627,7 +627,7 @@
       "id": 44,
       "description": "Steps editor allows deleting steps",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview with 5 steps",
         "Click delete button on step 3",
@@ -641,7 +641,7 @@
       "id": 45,
       "description": "Steps editor allows reordering with up/down buttons",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe preview with 3 steps",
         "Click 'down' button on step 1",
@@ -656,7 +656,7 @@
       "id": 46,
       "description": "Recipe can be saved to database",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to recipe preview with complete data",
@@ -671,7 +671,7 @@
       "id": 47,
       "description": "Saved recipe has proper JSON structure",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with ingredients and steps (artisan test)",
         "Retrieve recipe version from database (artisan test)",
@@ -685,7 +685,7 @@
       "id": 48,
       "description": "Recipe detail page displays full recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with saved recipe (artisan test)",
         "Navigate to http://localhost:8000/recipes/{id}",
@@ -704,7 +704,7 @@
       "id": 49,
       "description": "Recipe detail page displays ingredients with quantities",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe containing 5 ingredients (artisan test)",
         "Navigate to recipe detail page",
@@ -719,7 +719,7 @@
       "id": 50,
       "description": "Recipe can be deleted with confirmation",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",
@@ -735,7 +735,7 @@
       "id": 51,
       "description": "Recipe deletion cascades to versions and comments",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with 3 versions and 5 comments (artisan test)",
         "Delete recipe (artisan test)",
@@ -748,7 +748,7 @@
       "id": 52,
       "description": "Recipe edit creates new version",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe at version 1 (artisan test)",
         "Navigate to recipe edit page",
@@ -764,7 +764,7 @@
       "id": 53,
       "description": "Recipe version history lists all versions",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 4 versions (artisan test)",
         "Navigate to recipe detail page",
@@ -779,7 +779,7 @@
       "id": 54,
       "description": "Recipe version history shows change summaries",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with versions (artisan test)",
         "Navigate to version history page",
@@ -792,7 +792,7 @@
       "id": 55,
       "description": "Specific recipe version can be viewed",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 3 versions (artisan test)",
         "Navigate to version history page",
@@ -807,7 +807,7 @@
       "id": 56,
       "description": "Comments section displays on recipe page",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 3 comments (artisan test)",
         "Navigate to recipe detail page",
@@ -822,7 +822,7 @@
       "id": 57,
       "description": "AI comments show special indicator",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with AI comment (artisan test)",
         "Navigate to recipe detail page",
@@ -836,7 +836,7 @@
       "id": 58,
       "description": "AI comments with result version show link",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with AI comment linked to version 3 (artisan test)",
         "Navigate to recipe detail page",
@@ -850,7 +850,7 @@
       "id": 59,
       "description": "User can add comment to recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",
@@ -865,7 +865,7 @@
       "id": 60,
       "description": "AI chat interface displays correctly",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to http://localhost:8000/chat",
@@ -880,7 +880,7 @@
       "id": 61,
       "description": "AI chat loads previous conversation history",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with 5 chat messages in database (artisan test)",
         "Login as that user (artisan test)",
@@ -895,7 +895,7 @@
       "id": 62,
       "description": "AI chat sends message and receives response",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -912,7 +912,7 @@
       "id": 63,
       "description": "AI chat maintains conversation context",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client (artisan test)",
         "Send first message to chat (artisan test)",
@@ -925,7 +925,7 @@
       "id": 64,
       "description": "AI chat shows loading indicator",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -941,7 +941,7 @@
       "id": 65,
       "description": "AI chat auto-scrolls to newest message",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with 20 chat messages (artisan test)",
         "Navigate to /chat",
@@ -954,7 +954,7 @@
       "id": 66,
       "description": "AI chat messages have proper styling",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with chat history (artisan test)",
         "Navigate to /chat",
@@ -970,7 +970,7 @@
       "id": 67,
       "description": "AI chat detects when recipe is suggested",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to return recipe suggestion (artisan test)",
         "Send message asking for recipe (artisan test)",
@@ -982,7 +982,7 @@
       "id": 68,
       "description": "Save recipe button appears when AI suggests recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -996,7 +996,7 @@
       "id": 69,
       "description": "Saving recipe from chat creates recipe record",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to chat with AI recipe suggestion",
         "Click 'Save this recipe' button",
@@ -1010,7 +1010,7 @@
       "id": 70,
       "description": "Recipe feedback opens chat with context",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",
@@ -1025,7 +1025,7 @@
       "id": 71,
       "description": "AI processes recipe feedback and suggests changes",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI with recipe improvement prompt (artisan test)",
         "POST to /recipes/{id}/feedback with 'too salty' (artisan test)",
@@ -1038,7 +1038,7 @@
       "id": 72,
       "description": "AI recipe improvement shows preview of changes",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to feedback chat after AI suggests changes",
         "Verify diff preview is shown",
@@ -1055,7 +1055,7 @@
       "id": 73,
       "description": "Applying AI suggestions creates new version",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to feedback chat with AI suggestions",
         "Click 'Apply these changes' button",
@@ -1070,7 +1070,7 @@
       "id": 74,
       "description": "AI improvement comment links to resulting version",
       "category": "database",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Apply AI suggestions creating version 3 (artisan test)",
         "Query comments for recipe (artisan test)",
@@ -1083,7 +1083,7 @@
       "id": 75,
       "description": "User settings page displays preference options",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Click user name in navigation",
@@ -1101,7 +1101,7 @@
       "id": 76,
       "description": "User settings can be saved",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /settings",
@@ -1117,7 +1117,7 @@
       "id": 77,
       "description": "User settings load current preferences",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with volume_unit='cups' (artisan test)",
         "Login as that user (artisan test)",
@@ -1130,7 +1130,7 @@
       "id": 78,
       "description": "Unit conversion service converts volume correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create unit conversion test in JavaScript",
         "Test: convertVolume(236.588, 'cups') returns {value: 1, unit: 'cups'}",
@@ -1144,7 +1144,7 @@
       "id": 79,
       "description": "Unit conversion service converts weight correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create unit conversion test in JavaScript",
         "Test: convertWeight(28.3495, 'oz') returns {value: 1, unit: 'oz'}",
@@ -1158,7 +1158,7 @@
       "id": 80,
       "description": "Unit conversion service formats time correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create time formatting test in JavaScript",
         "Test: formatTime(30, 'min') returns '30 min'",
@@ -1172,7 +1172,7 @@
       "id": 81,
       "description": "Recipe ingredients display in user's preferred units",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with weight_unit='oz' (artisan test)",
         "Create recipe with ingredient: 250g flour (artisan test)",
@@ -1187,7 +1187,7 @@
       "id": 82,
       "description": "Recipe ingredients with non-convertible units display as-is",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with ingredient: 3 pieces eggs (artisan test)",
         "Login as user with any unit preferences (artisan test)",
@@ -1200,7 +1200,7 @@
       "id": 83,
       "description": "Recipe detail page shows serving size control",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with servings=4 (artisan test)",
         "Navigate to recipe detail page",
@@ -1215,7 +1215,7 @@
       "id": 84,
       "description": "Serving size modifier scales ingredient quantities",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe for 4 servings with 200g flour",
         "Change servings to 6",
@@ -1229,7 +1229,7 @@
       "id": 85,
       "description": "Serving size modifier works with unit conversion",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with weight_unit='oz' (artisan test)",
         "Navigate to recipe for 4 servings with 200g flour",
@@ -1243,7 +1243,7 @@
       "id": 86,
       "description": "Serving size modifier has minimum of 1",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Click minus button until servings is 1",
@@ -1256,7 +1256,7 @@
       "id": 87,
       "description": "Serving size modifier has reset button",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe for 4 servings",
         "Change servings to 8",
@@ -1270,7 +1270,7 @@
       "id": 88,
       "description": "Serving size persists in sessionStorage",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Change servings to 6",
@@ -1284,7 +1284,7 @@
       "id": 89,
       "description": "OpenAI service class is testable with dependency injection",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Verify OpenAI service accepts client in constructor (artisan test)",
         "Create mock client (artisan test)",
@@ -1298,7 +1298,7 @@
       "id": 90,
       "description": "OpenAI service logs API calls",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Inject mock logger into OpenAI service (artisan test)",
         "Call parseRecipeText method (artisan test)",
@@ -1311,7 +1311,7 @@
       "id": 91,
       "description": "OpenAI service handles timeout errors",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to throw timeout exception (artisan test)",
         "Call parseRecipeText method (artisan test)",
@@ -1324,7 +1324,7 @@
       "id": 92,
       "description": "OpenAI service handles rate limit errors",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to return 429 status (artisan test)",
         "Call chatResponse method (artisan test)",
@@ -1336,7 +1336,7 @@
       "id": 93,
       "description": "OpenAI service handles invalid API key error",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI client to return 401 status (artisan test)",
         "Call improveRecipe method (artisan test)",
@@ -1348,7 +1348,7 @@
       "id": 94,
       "description": "Form styling is consistent across application",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to login page",
         "Verify labels are above inputs",
@@ -1364,7 +1364,7 @@
       "id": 95,
       "description": "Form validation errors display correctly",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to registration page",
         "Submit form with empty fields",
@@ -1378,7 +1378,7 @@
       "id": 96,
       "description": "Buttons have disabled state during loading",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to login page",
         "Fill in credentials",
@@ -1393,7 +1393,7 @@
       "id": 97,
       "description": "Mobile responsive design works on dashboard",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes (artisan test)",
         "Navigate to dashboard",
@@ -1409,7 +1409,7 @@
       "id": 98,
       "description": "Mobile responsive design works on chat interface",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /chat",
@@ -1425,7 +1425,7 @@
       "id": 99,
       "description": "Color scheme uses defined palette throughout",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate through all pages of application",
         "Verify primary color #E07A5F used for main actions",
@@ -1441,7 +1441,7 @@
       "id": 100,
       "description": "Typography uses defined fonts consistently",
       "category": "style",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to recipe detail page",
         "Verify recipe title uses Georgia serif font",
