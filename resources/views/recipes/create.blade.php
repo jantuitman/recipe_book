@@ -289,13 +289,35 @@ Instructions:
             csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
             form.appendChild(csrfInput);
 
-            // Add recipe data as hidden inputs
-            Object.keys(recipeData).forEach(key => {
+            // Add simple fields
+            ['name', 'description', 'servings'].forEach(key => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = key;
-                input.value = typeof recipeData[key] === 'object' ? JSON.stringify(recipeData[key]) : recipeData[key];
+                input.value = recipeData[key];
                 form.appendChild(input);
+            });
+
+            // Add ingredients array properly
+            recipeData.ingredients.forEach((ingredient, index) => {
+                ['name', 'quantity', 'unit'].forEach(field => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = `ingredients[${index}][${field}]`;
+                    input.value = ingredient[field];
+                    form.appendChild(input);
+                });
+            });
+
+            // Add steps array properly
+            recipeData.steps.forEach((step, index) => {
+                ['step_number', 'instruction'].forEach(field => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = `steps[${index}][${field}]`;
+                    input.value = step[field];
+                    form.appendChild(input);
+                });
             });
 
             document.body.appendChild(form);
