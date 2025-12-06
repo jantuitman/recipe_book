@@ -98,8 +98,42 @@
 
             messageDiv.appendChild(bubbleDiv);
 
-            // If this is an AI message with a recipe, add a "Save Recipe" button
+            // If this is an AI message with a recipe, show the recipe and add a "Save Recipe" button
             if (role === 'assistant' && recipeData) {
+                // Render recipe preview
+                const recipeDiv = document.createElement('div');
+                recipeDiv.className = 'mt-3 max-w-[80%] bg-white border border-gray-200 rounded-lg p-4 shadow-sm';
+
+                let recipeHtml = `<h4 class="font-bold text-lg mb-3" style="color: #3D405B;">${recipeData.name || 'Recipe'}</h4>`;
+
+                // Ingredients
+                if (recipeData.ingredients && recipeData.ingredients.length > 0) {
+                    recipeHtml += `<p class="font-semibold text-sm mb-1" style="color: #E07A5F;">Ingredients:</p>`;
+                    recipeHtml += `<ul class="list-disc list-inside mb-3 text-sm text-gray-700">`;
+                    recipeData.ingredients.forEach(ing => {
+                        const qty = ing.quantity || '';
+                        const unit = ing.unit || '';
+                        const name = ing.name || '';
+                        recipeHtml += `<li>${qty} ${unit} ${name}</li>`;
+                    });
+                    recipeHtml += `</ul>`;
+                }
+
+                // Steps
+                if (recipeData.steps && recipeData.steps.length > 0) {
+                    recipeHtml += `<p class="font-semibold text-sm mb-1" style="color: #E07A5F;">Steps:</p>`;
+                    recipeHtml += `<ol class="list-decimal list-inside text-sm text-gray-700">`;
+                    recipeData.steps.forEach(step => {
+                        const instruction = step.instruction || step;
+                        recipeHtml += `<li class="mb-1">${instruction}</li>`;
+                    });
+                    recipeHtml += `</ol>`;
+                }
+
+                recipeDiv.innerHTML = recipeHtml;
+                messageDiv.appendChild(recipeDiv);
+
+                // Save button
                 const buttonDiv = document.createElement('div');
                 buttonDiv.className = 'mt-3 max-w-[70%]';
 
