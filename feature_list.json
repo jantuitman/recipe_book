@@ -1083,7 +1083,7 @@
       "id": 75,
       "description": "User settings page displays preference options",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Click user name in navigation",
@@ -1101,7 +1101,7 @@
       "id": 76,
       "description": "User settings can be saved",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /settings",
@@ -1117,7 +1117,7 @@
       "id": 77,
       "description": "User settings load current preferences",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with volume_unit='cups' (artisan test)",
         "Login as that user (artisan test)",
