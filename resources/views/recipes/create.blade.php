@@ -214,26 +214,30 @@ Instructions:
             errorMessage.classList.add('hidden');
 
             try {
-                // TODO: Call AI parsing endpoint
-                // For now, show error that feature is not yet implemented
-                throw new Error('AI parsing feature is not yet implemented. Please check back soon!');
+                // Call AI parsing endpoint
+                const response = await fetch('/ai/parse-recipe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ text })
+                });
 
-                // Future implementation:
-                // const response = await fetch('/ai/parse-recipe', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                //     },
-                //     body: JSON.stringify({ text, name })
-                // });
+                const result = await response.json();
 
-                // if (!response.ok) {
-                //     throw new Error('Failed to parse recipe');
-                // }
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to parse recipe');
+                }
 
-                // parsedRecipe = await response.json();
-                // showPreview(parsedRecipe);
+                parsedRecipe = result.data;
+
+                // Override recipe name if user provided one
+                if (name) {
+                    parsedRecipe.name = name;
+                }
+
+                showPreview(parsedRecipe);
             } catch (error) {
                 showError(error.message);
             } finally {

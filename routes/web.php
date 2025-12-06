@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\RecipeParserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function () {
 
     // Chat route
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
+
+    // AI API routes
+    Route::post('/ai/parse-recipe', [RecipeParserController::class, 'parse'])->name('ai.parse-recipe');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -209,7 +209,7 @@
       "id": 16,
       "description": "User login remembers user when checkbox selected",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Navigate to http://localhost:8000/login",
         "Fill in email and password",
@@ -450,7 +450,7 @@
       "id": 32,
       "description": "AI recipe parser endpoint receives text and returns structured data",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create test with mocked OpenAI client (artisan test)",
         "Send POST to /ai/parse-recipe with recipe text (artisan test)",
@@ -465,7 +465,7 @@
       "id": 33,
       "description": "AI recipe parser converts units to metric",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to parse '2 cups flour, 4 oz butter' (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -478,7 +478,7 @@
       "id": 34,
       "description": "AI recipe parser extracts serving count",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to parse recipe with 'Serves 6' (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -491,7 +491,7 @@
       "id": 35,
       "description": "AI recipe parser handles API errors gracefully",
       "category": "api",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Mock OpenAI to throw timeout error (artisan test)",
         "Send POST to /ai/parse-recipe (artisan test)",
@@ -506,7 +506,7 @@
       "id": 36,
       "description": "Recipe parsing shows loading spinner",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user (artisan test)",
         "Navigate to /recipes/create",
