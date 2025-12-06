@@ -52,12 +52,21 @@
                         </div>
 
                         <!-- Ingredients -->
-                        <div class="mb-6">
+                        <div class="mb-6"
+                             data-controller="unit-conversion"
+                             data-unit-conversion-volume-unit-value="{{ auth()->user()->volume_unit ?? 'ml' }}"
+                             data-unit-conversion-weight-unit-value="{{ auth()->user()->weight_unit ?? 'g' }}"
+                             data-unit-conversion-time-format-value="{{ auth()->user()->time_format ?? 'min' }}">
                             <h2 class="text-xl font-semibold mb-3">Ingredients</h2>
                             <ul class="list-disc list-inside space-y-1">
                                 @foreach($latestVersion->ingredients as $ingredient)
                                     <li class="text-gray-700">
-                                        {{ $ingredient['quantity'] }} {{ $ingredient['unit'] }} {{ $ingredient['name'] }}
+                                        <span data-unit-conversion-target="ingredient"
+                                              data-base-quantity="{{ $ingredient['quantity'] }}"
+                                              data-base-unit="{{ $ingredient['unit'] }}">
+                                            {{ $ingredient['quantity'] }} {{ $ingredient['unit'] }}
+                                        </span>
+                                        {{ $ingredient['name'] }}
                                     </li>
                                 @endforeach
                             </ul>

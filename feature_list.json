@@ -1130,7 +1130,7 @@
       "id": 78,
       "description": "Unit conversion service converts volume correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create unit conversion test in JavaScript",
         "Test: convertVolume(236.588, 'cups') returns {value: 1, unit: 'cups'}",
@@ -1144,7 +1144,7 @@
       "id": 79,
       "description": "Unit conversion service converts weight correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create unit conversion test in JavaScript",
         "Test: convertWeight(28.3495, 'oz') returns {value: 1, unit: 'oz'}",
@@ -1158,7 +1158,7 @@
       "id": 80,
       "description": "Unit conversion service formats time correctly",
       "category": "js",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create time formatting test in JavaScript",
         "Test: formatTime(30, 'min') returns '30 min'",
@@ -1172,7 +1172,7 @@
       "id": 81,
       "description": "Recipe ingredients display in user's preferred units",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create user with weight_unit='oz' (artisan test)",
         "Create recipe with ingredient: 250g flour (artisan test)",
@@ -1187,7 +1187,7 @@
       "id": 82,
       "description": "Recipe ingredients with non-convertible units display as-is",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with ingredient: 3 pieces eggs (artisan test)",
         "Login as user with any unit preferences (artisan test)",
