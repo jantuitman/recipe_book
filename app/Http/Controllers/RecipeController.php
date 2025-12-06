@@ -1,0 +1,150 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Recipe;
+use App\Models\RecipeVersion;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class RecipeController extends Controller
+{
+    use AuthorizesRequests;
+    /**
+     * Display the user's recipe dashboard.
+     */
+    public function index()
+    {
+        $recipes = Auth::user()->recipes()
+            ->with('versions')
+            ->latest()
+            ->get();
+
+        return view('recipes.index', compact('recipes'));
+    }
+
+    /**
+     * Show the form for creating a new recipe.
+     */
+    public function create()
+    {
+        return view('recipes.create');
+    }
+
+    /**
+     * Store a newly created recipe in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'servings' => 'required|integer|min:1',
+            'ingredients' => 'required|array',
+            'ingredients.*.name' => 'required|string',
+            'ingredients.*.quantity' => 'required|numeric',
+            'ingredients.*.unit' => 'required|string',
+            'steps' => 'required|array',
+            'steps.*.step_number' => 'required|integer',
+            'steps.*.instruction' => 'required|string',
+        ]);
+
+        $recipe = Auth::user()->recipes()->create([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? '',
+        ]);
+
+        $recipe->versions()->create([
+            'version_number' => 1,
+            'servings' => $validated['servings'],
+            'ingredients' => $validated['ingredients'],
+            'steps' => $validated['steps'],
+            'change_summary' => 'Initial version',
+        ]);
+
+        return redirect()->route('recipes.show', $recipe)
+            ->with('success', 'Recipe created successfully!');
+    }
+
+    /**
+     * Display the specified recipe.
+     */
+    public function show(Recipe $recipe)
+    {
+        $this->authorize('view', $recipe);
+
+        $recipe->load('versions');
+
+        $latestVersion = $recipe->versions->sortByDesc('version_number')->first();
+
+        return view('recipes.show', compact('recipe', 'latestVersion'));
+    }
+
+    /**
+     * Show the form for editing the specified recipe.
+     */
+    public function edit(Recipe $recipe)
+    {
+        $this->authorize('update', $recipe);
+
+        $recipe->load('versions');
+        $latestVersion = $recipe->versions->sortByDesc('version_number')->first();
+
+        return view('recipes.edit', compact('recipe', 'latestVersion'));
+    }
+
+    /**
+     * Update the specified recipe in storage (creates new version).
+     */
+    public function update(Request $request, Recipe $recipe)
+    {
+        $this->authorize('update', $recipe);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'servings' => 'required|integer|min:1',
+            'ingredients' => 'required|array',
+            'ingredients.*.name' => 'required|string',
+            'ingredients.*.quantity' => 'required|numeric',
+            'ingredients.*.unit' => 'required|string',
+            'steps' => 'required|array',
+            'steps.*.step_number' => 'required|integer',
+            'steps.*.instruction' => 'required|string',
+            'change_summary' => 'nullable|string',
+        ]);
+
+        $recipe->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? '',
+        ]);
+
+        $latestVersion = $recipe->versions->sortByDesc('version_number')->first();
+        $newVersionNumber = $latestVersion ? $latestVersion->version_number + 1 : 1;
+
+        $recipe->versions()->create([
+            'version_number' => $newVersionNumber,
+            'servings' => $validated['servings'],
+            'ingredients' => $validated['ingredients'],
+            'steps' => $validated['steps'],
+            'change_summary' => $validated['change_summary'] ?? 'Manual edit',
+        ]);
+
+        return redirect()->route('recipes.show', $recipe)
+            ->with('success', 'Recipe updated successfully!');
+    }
+
+    /**
+     * Remove the specified recipe from storage.
+     */
+    public function destroy(Recipe $recipe)
+    {
+        $this->authorize('delete', $recipe);
+
+        $recipe->delete();
+
+        return redirect()->route('recipes.index')
+            ->with('success', 'Recipe deleted successfully!');
+    }
+}

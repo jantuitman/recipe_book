@@ -255,7 +255,7 @@
       "id": 19,
       "description": "Users can only see their own recipes",
       "category": "auth",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create two users with recipes (artisan test)",
         "Login as user 1 (artisan test)",
@@ -269,7 +269,7 @@
       "id": 20,
       "description": "Recipe dashboard displays user's recipe collection",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as test user with 5 recipes (artisan test)",
         "Navigate to http://localhost:8000/dashboard",
@@ -285,7 +285,7 @@
       "id": 21,
       "description": "Recipe dashboard shows empty state when no recipes",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as new user with no recipes (artisan test)",
         "Navigate to http://localhost:8000/dashboard",
@@ -315,7 +315,7 @@
       "id": 23,
       "description": "Recipe search filters by name in real-time",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes 'Pasta', 'Pizza', 'Salad' (artisan test)",
         "Navigate to dashboard",
@@ -331,7 +331,7 @@
       "id": 24,
       "description": "Recipe search filters by ingredient",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipes containing different ingredients (artisan test)",
         "Navigate to dashboard",
@@ -685,7 +685,7 @@
       "id": 48,
       "description": "Recipe detail page displays full recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with saved recipe (artisan test)",
         "Navigate to http://localhost:8000/recipes/{id}",
@@ -704,7 +704,7 @@
       "id": 49,
       "description": "Recipe detail page displays ingredients with quantities",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe containing 5 ingredients (artisan test)",
         "Navigate to recipe detail page",
