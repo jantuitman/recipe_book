@@ -807,7 +807,7 @@
       "id": 56,
       "description": "Comments section displays on recipe page",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with 3 comments (artisan test)",
         "Navigate to recipe detail page",
@@ -822,7 +822,7 @@
       "id": 57,
       "description": "AI comments show special indicator",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe with AI comment (artisan test)",
         "Navigate to recipe detail page",
@@ -836,7 +836,7 @@
       "id": 58,
       "description": "AI comments with result version show link",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Create recipe with AI comment linked to version 3 (artisan test)",
         "Navigate to recipe detail page",
@@ -850,7 +850,7 @@
       "id": 59,
       "description": "User can add comment to recipe",
       "category": "ui",
-      "status": "pending",
+      "status": "passing",
       "test_steps": [
         "Login as user with recipe (artisan test)",
         "Navigate to recipe detail page",

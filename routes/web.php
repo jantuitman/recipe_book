@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Api\RecipeParserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function () {
     // Recipe version routes
     Route::get('/recipes/{recipe}/history', [RecipeController::class, 'history'])->name('recipes.history');
     Route::get('/recipes/{recipe}/versions/{version}', [RecipeController::class, 'showVersion'])->name('recipes.versions.show');
+
+    // Comment routes
+    Route::post('/recipes/{recipe}/versions/{version}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     // Chat route
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');

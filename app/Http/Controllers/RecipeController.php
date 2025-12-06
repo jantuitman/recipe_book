@@ -74,11 +74,14 @@ class RecipeController extends Controller
     {
         $this->authorize('view', $recipe);
 
-        $recipe->load('versions');
+        $recipe->load(['versions.comments.user', 'versions.comments.resultVersion']);
 
         $latestVersion = $recipe->versions->sortByDesc('version_number')->first();
 
-        return view('recipes.show', compact('recipe', 'latestVersion'));
+        // Get comments for the latest version, sorted chronologically
+        $comments = $latestVersion ? $latestVersion->comments()->with(['user', 'resultVersion'])->orderBy('created_at', 'asc')->get() : collect();
+
+        return view('recipes.show', compact('recipe', 'latestVersion', 'comments'));
     }
 
     /**
@@ -174,6 +177,9 @@ class RecipeController extends Controller
             abort(404);
         }
 
-        return view('recipes.show-version', compact('recipe', 'version'));
+        // Load comments for this version
+        $comments = $version->comments()->with(['user', 'resultVersion'])->orderBy('created_at', 'asc')->get();
+
+        return view('recipes.show-version', compact('recipe', 'version', 'comments'));
     }
 }
