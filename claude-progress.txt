@@ -684,3 +684,24 @@ NOTES:
 
 SESSION END TIME: 2025-12-06
 TOKEN USAGE: ~82k / 200k tokens used
+
+===========================================
+SESSION 6 CONTINUATION - Steps Reordering
+===========================================
+
+7. ✅ Implemented steps editor reordering (Feature 45)
+   - Added up/down arrow buttons to each step
+   - moveStepUp() moves step before previous sibling
+   - moveStepDown() moves step after next sibling
+   - Auto-renumbering after every reorder
+   - Vertical button layout with hover effects
+   - Browser verified with Playwright
+   - Screenshot evidence saved
+
+UPDATED FEATURE STATUS:
+- Feature 45: Steps editor allows reordering with up/down buttons
+
+Current Status: 48/100 features passing
+
+GIT COMMITS:
+- aab30d3: Implement steps editor reordering - feature 45 passing
