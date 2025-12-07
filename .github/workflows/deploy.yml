@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create deployment tarball
+        run: tar -cvf deploy.tar --exclude='.git' --exclude='node_modules' --exclude='vendor' .
+
       - name: Deploy to CapRover
         uses: caprover/deploy-from-github@v1.1.2
         with:
