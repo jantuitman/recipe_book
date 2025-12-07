@@ -1,59 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Recipe Book
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Een slimme recepten-app met AI-ondersteuning voor het maken, verbeteren en beheren van je recepten.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Receptbeheer
+- **Recepten maken**: Voeg handmatig recepten toe met ingrediënten en bereidingsstappen
+- **Versiegeschiedenis**: Elke wijziging wordt als nieuwe versie opgeslagen
+- **Zoeken**: Doorzoek recepten op naam of ingrediënt
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### AI-functies
+- **AI Chat**: Vraag om receptsuggesties en sla ze direct op in je receptenboek
+- **Slimme feedback**: Plaats een opmerking met feedback en de app detecteert automatisch of het een verbeterverzoek is
+- **Receptverbetering**: Klik op "Verbeter recept!" bij feedback-opmerkingen om AI-gegenereerde verbeteringen te krijgen
+- **Preview**: Bekijk AI-suggesties voordat je ze toepast
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Eenheden & Porties
+- **Eenhedenvoorkeur**: Kies tussen metrisch of imperiaal stelsel in je instellingen
+- **Automatische conversie**: Ingrediënten worden getoond in jouw voorkeursysteem
+- **Portie-schaling**: Pas het aantal porties aan en alle hoeveelheden worden herberekend
 
-## Learning Laravel
+### Gebruikerservaring
+- **Opmerkingen per versie**: Volg discussies en feedback door alle versies heen
+- **Versiebadges**: Zie direct bij welke versie een opmerking hoort
+- **Responsive design**: Werkt op desktop en mobiel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Backend**: Laravel 11 (PHP 8.3)
+- **Frontend**: Blade templates, Tailwind CSS, StimulusJS
+- **Database**: MySQL/MariaDB
+- **AI**: OpenAI API (GPT-4)
+- **Build**: Vite
 
-## Laravel Sponsors
+## Installatie
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Vereisten
+- PHP 8.3+
+- Composer
+- Node.js 18+
+- MySQL of MariaDB
+- OpenAI API key
 
-### Premium Partners
+### Stappen
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Clone de repository**
+   ```bash
+   git clone <repository-url>
+   cd recipe_book
+   ```
 
-## Contributing
+2. **Installeer dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Configuratie**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Code of Conduct
+4. **Database configureren**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Pas `.env` aan met je database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=recipe_book
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-## Security Vulnerabilities
+5. **OpenAI API key toevoegen**
+   ```env
+   OPENAI_API_KEY=sk-...
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Database setup**
+   ```bash
+   php artisan migrate
+   php artisan db:seed  # Optioneel: demo data
+   ```
 
-## License
+7. **Build assets**
+   ```bash
+   npm run build
+   # Of voor development:
+   npm run dev
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+8. **Start de server**
+   ```bash
+   php artisan serve
+   ```
+
+## Development
+
+### DevContainer
+Dit project bevat een DevContainer configuratie voor VS Code. Open de folder in VS Code en kies "Reopen in Container".
+
+### Vite configuratie
+Voor development in een container is Vite geconfigureerd met:
+```javascript
+server: {
+    host: '0.0.0.0',
+    origin: 'http://localhost:5173',
+    cors: true,
+}
+```
+
+### Tests draaien
+```bash
+php artisan test
+```
+
+## Project Structuur
+
+```
+app/
+├── Http/Controllers/
+│   ├── RecipeController.php    # CRUD + versies + AI feedback
+│   ├── CommentController.php   # Opmerkingen + feedback detectie
+│   ├── ChatController.php      # AI chat interface
+│   └── SettingsController.php  # Gebruikersinstellingen
+├── Models/
+│   ├── Recipe.php              # Recept model
+│   ├── RecipeVersion.php       # Versie met ingrediënten/stappen
+│   ├── Comment.php             # Opmerkingen + has_feedback
+│   └── User.php                # Gebruiker + unit_preference
+└── Services/
+    └── OpenAiService.php       # AI integratie
+
+resources/
+├── js/controllers/             # StimulusJS controllers
+│   ├── units_controller.js     # Eenheden conversie
+│   └── servings_controller.js  # Portie schaling
+└── views/
+    ├── recipes/                # Recept views
+    ├── chat/                   # AI chat interface
+    └── settings/               # Instellingen
+```
+
+## Kleurenpalet
+
+De app gebruikt een warm, uitnodigend kleurenpalet:
+- **Primary**: `#E07A5F` (Terracotta)
+- **Secondary**: `#81B29A` (Sage groen)
+- **Accent**: `#F2CC8F` (Zandgeel)
+- **Dark**: `#3D405B` (Donkerblauw-grijs)
+- **Light**: `#F4F1DE` (Crème)
+
+## Licentie
+
+MIT License
