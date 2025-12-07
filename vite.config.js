@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
+    base: './',
     server: {
         host: '0.0.0.0',
         origin: 'http://localhost:5173',

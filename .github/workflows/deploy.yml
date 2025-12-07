@@ -1,0 +1,24 @@
+name: Deploy to CapRover
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deployment tarball
+        run: tar -cvf deploy.tar --exclude='.git' --exclude='node_modules' --exclude='vendor' .
+
+      - name: Deploy to CapRover
+        uses: caprover/deploy-from-github@v1.1.2
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_APP }}'
+          token: '${{ secrets.CAPROVER_TOKEN }}'

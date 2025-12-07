@@ -18,6 +18,40 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        config(['app.invite_code' => 'TestCode123']);
+
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'invite_code' => 'TestCode123',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_registration_fails_with_wrong_invite_code(): void
+    {
+        config(['app.invite_code' => 'CorrectCode']);
+
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'invite_code' => 'WrongCode',
+        ]);
+
+        $response->assertSessionHasErrors('invite_code');
+        $this->assertGuest();
+    }
+
+    public function test_registration_requires_invite_code(): void
+    {
+        config(['app.invite_code' => 'TestCode123']);
+
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -25,8 +59,8 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertSessionHasErrors('invite_code');
+        $this->assertGuest();
     }
 
     public function test_registration_requires_name(): void
@@ -83,12 +117,15 @@ class RegistrationTest extends TestCase
 
     public function test_registration_prevents_duplicate_emails(): void
     {
+        config(['app.invite_code' => 'TestCode123']);
+
         // Create first user
         $this->post('/register', [
             'name' => 'First User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'invite_code' => 'TestCode123',
         ]);
 
         // Logout
@@ -100,6 +137,7 @@ class RegistrationTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'invite_code' => 'TestCode123',
         ]);
 
         $response->assertSessionHasErrors('email');

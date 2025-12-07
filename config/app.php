@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Invite Code
+    |--------------------------------------------------------------------------
+    |
+    | This code is required for new user registration. Only users with the
+    | correct invite code can create an account.
+    |
+    */
+
+    'invite_code' => env('INVITE_CODE'),
+
 ];

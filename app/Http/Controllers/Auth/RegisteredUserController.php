@@ -33,6 +33,11 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'invite_code' => ['required', 'string', function ($attribute, $value, $fail) {
+                if ($value !== config('app.invite_code')) {
+                    $fail('The invite code is invalid.');
+                }
+            }],
         ]);
 
         $user = User::create([
